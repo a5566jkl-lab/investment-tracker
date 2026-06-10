@@ -4,6 +4,11 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>投資追蹤</title>
+<link rel="manifest" href="/manifest.json">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="投資追蹤">
+<meta name="theme-color" content="#ffffff">
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
 body { font-family: -apple-system, sans-serif; background: #f5f5f5; color: #111; }
@@ -18,7 +23,6 @@ body { font-family: -apple-system, sans-serif; background: #f5f5f5; color: #111;
 .tab.active { color: #111; border-bottom: 2px solid #111; font-weight: 500; }
 .section { padding: 1rem 1.25rem 0; max-width: 480px; margin: 0 auto; }
 .grid3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin-bottom: 1rem; }
-.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 1rem; }
 .metric { background: #fff; border-radius: 10px; padding: 0.75rem 1rem; border: 1px solid #eee; }
 .metric-label { font-size: 11px; color: #888; margin-bottom: 4px; }
 .metric-value { font-size: 15px; font-weight: 600; }
@@ -48,14 +52,24 @@ body { font-family: -apple-system, sans-serif; background: #f5f5f5; color: #111;
 .bar-wrap { margin-bottom: 0.75rem; background: #fff; border-radius: 12px; border: 1px solid #eee; padding: 1rem 1.25rem; }
 .bar-track { height: 8px; background: #f0f0f0; border-radius: 4px; position: relative; margin: 10px 0 4px; }
 .bar-fill { height: 100%; border-radius: 4px; background: #EF9F27; transition: width 0.4s; }
+.bar-fill-green { height: 100%; border-radius: 4px; background: #1D9E75; transition: width 0.4s; }
 .bar-mid { position: absolute; top: -4px; left: 50%; width: 2px; height: 16px; background: #ccc; }
 .bar-labels { display: flex; justify-content: space-between; font-size: 11px; color: #888; }
+.progress-nums { display: flex; justify-content: space-between; margin-top: 8px; }
+.pn { font-size: 12px; color: #888; }
+.pn span { font-weight: 600; color: #111; }
+.install-banner { background: #fff; border-radius: 12px; border: 1px solid #eee; padding: 1rem 1.25rem; margin-bottom: 0.75rem; display: flex; align-items: center; gap: 12px; }
+.install-icon { width: 44px; height: 44px; background: #111; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 22px; flex-shrink: 0; }
+.install-text { flex: 1; }
+.install-title { font-size: 14px; font-weight: 600; margin-bottom: 2px; }
+.install-sub { font-size: 12px; color: #888; }
+.install-btn { background: #111; color: #fff; border: none; border-radius: 8px; padding: 8px 14px; font-size: 13px; cursor: pointer; flex-shrink: 0; }
 </style>
 </head>
 <body>
 
 <div class="header">
-  <div class="header-title">我的投資總覽</div>
+  <div class="header-title">投資追蹤</div>
   <div class="header-sub">
     <span class="dot" id="dot"></span>
     <span id="status">載入中...</span>
@@ -68,37 +82,16 @@ body { font-family: -apple-system, sans-serif; background: #f5f5f5; color: #111;
 
 <div id="tab-overview">
   <div class="section" style="margin-top:1rem;">
-
     <div class="grid3">
-      <div class="metric">
-        <div class="metric-label">可投入本金</div>
-        <div class="metric-value">NT$997,000</div>
-      </div>
-      <div class="metric">
-        <div class="metric-label">已投入資金</div>
-        <div class="metric-value" id="ov-invested">—</div>
-      </div>
-      <div class="metric">
-        <div class="metric-label">剩餘可用資金</div>
-        <div class="metric-value pos" id="ov-cash">—</div>
-      </div>
+      <div class="metric"><div class="metric-label">可投入本金</div><div class="metric-value">NT$997,000</div></div>
+      <div class="metric"><div class="metric-label">已投入資金</div><div class="metric-value" id="ov-invested">—</div></div>
+      <div class="metric"><div class="metric-label">剩餘可用資金</div><div class="metric-value pos" id="ov-cash">—</div></div>
     </div>
-
     <div class="grid3">
-      <div class="metric">
-        <div class="metric-label">持股市值</div>
-        <div class="metric-value" id="ov-mv">—</div>
-      </div>
-      <div class="metric">
-        <div class="metric-label">總損益</div>
-        <div class="metric-value" id="ov-pnl">—</div>
-      </div>
-      <div class="metric">
-        <div class="metric-label">報酬率</div>
-        <div class="metric-value" id="ov-ret">—</div>
-      </div>
+      <div class="metric"><div class="metric-label">持股市值</div><div class="metric-value" id="ov-mv">—</div></div>
+      <div class="metric"><div class="metric-label">總損益</div><div class="metric-value" id="ov-pnl">—</div></div>
+      <div class="metric"><div class="metric-label">報酬率</div><div class="metric-value" id="ov-ret">—</div></div>
     </div>
-
     <div class="bar-wrap">
       <div style="display:flex;justify-content:space-between;align-items:center;">
         <span style="font-size:14px;color:#666;">曝險率</span>
@@ -111,7 +104,6 @@ body { font-family: -apple-system, sans-serif; background: #f5f5f5; color: #111;
       <div class="bar-labels"><span>0%</span><span>100%</span><span>200%</span></div>
       <div style="font-size:12px;color:#888;margin-top:8px;" id="ov-formula">—</div>
     </div>
-
     <div class="stock-card">
       <div class="stock-top">
         <div>
@@ -146,7 +138,6 @@ body { font-family: -apple-system, sans-serif; background: #f5f5f5; color: #111;
         </div>
       </div>
     </div>
-
     <div class="stock-card">
       <div class="stock-top">
         <div>
@@ -181,12 +172,26 @@ body { font-family: -apple-system, sans-serif; background: #f5f5f5; color: #111;
         </div>
       </div>
     </div>
-
   </div>
 </div>
 
 <div id="tab-loan" style="display:none;">
   <div class="section" style="margin-top:1rem;">
+    <div class="bar-wrap">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
+        <span style="font-size:14px;font-weight:600;">還款進度</span>
+        <span style="font-size:20px;font-weight:600;" id="l-progress-pct">—</span>
+      </div>
+      <div style="font-size:12px;color:#888;margin-bottom:10px;" id="l-progress-sub">—</div>
+      <div class="bar-track">
+        <div class="bar-fill-green" id="l-progress-bar" style="width:0%"></div>
+      </div>
+      <div class="progress-nums">
+        <div class="pn">已還 <span id="l-paid-periods">—</span> 期</div>
+        <div class="pn">剩餘 <span id="l-remain-periods">—</span> 期</div>
+        <div class="pn">共 <span>84 期</span></div>
+      </div>
+    </div>
     <div class="card">
       <div class="card-title">信貸基本資料</div>
       <div class="row"><span class="rl">貸款本金</span><span class="rv">NT$997,000</span></div>
@@ -207,6 +212,23 @@ body { font-family: -apple-system, sans-serif; background: #f5f5f5; color: #111;
       <div class="row"><span class="rl">已付利息</span><span class="rv neg" id="l-paid-int">—</span></div>
       <div class="row"><span class="rl">已繳總金額</span><span class="rv">NT$26,246</span></div>
     </div>
+    <div class="install-banner" id="install-banner" style="display:none;">
+      <div class="install-icon">📈</div>
+      <div class="install-text">
+        <div class="install-title">加入主畫面</div>
+        <div class="install-sub">像 App 一樣快速開啟</div>
+      </div>
+      <button class="install-btn" id="install-btn">安裝</button>
+    </div>
+    <div class="card" style="margin-top:0.25rem;">
+      <div class="card-title">📱 加入手機主畫面</div>
+      <div style="font-size:13px;color:#666;line-height:1.8;">
+        <b>iPhone（Safari）：</b><br>
+        點底部 <b>分享按鈕 □↑</b> → 選「加入主畫面」<br><br>
+        <b>Android（Chrome）：</b><br>
+        點右上角 <b>⋮</b> → 選「新增至主畫面」
+      </div>
+    </div>
   </div>
 </div>
 
@@ -214,7 +236,7 @@ body { font-family: -apple-system, sans-serif; background: #f5f5f5; color: #111;
 const principal = 997000;
 const s919 = { shares: 17000, cost: 23.68, leverage: 1 };
 const s631 = { shares: 15000, cost: 34.93, leverage: 2 };
-const annualRate = 0.028, monthlyPayment = 13123, loanBalance = 978409, paidPeriods = 2;
+const annualRate = 0.028, monthlyPayment = 13123, loanBalance = 978409, paidPeriods = 2, totalPeriods = 84;
 
 function fmt(n) { return 'NT$' + Math.round(n).toLocaleString(); }
 function pct(n) { return (n >= 0 ? '+' : '') + n.toFixed(2) + '%'; }
@@ -232,6 +254,20 @@ function calcLoan() {
 
 function renderLoan() {
   const l = calcLoan();
+  const progressPct = (paidPeriods / totalPeriods * 100).toFixed(1);
+  const remainPeriods = totalPeriods - paidPeriods;
+  const remainYears = Math.floor(remainPeriods / 12);
+  const remainMonths = remainPeriods % 12;
+
+  document.getElementById('l-progress-pct').textContent = progressPct + '%';
+  document.getElementById('l-progress-sub').textContent =
+    '已還 NT$' + Math.round(principal - loanBalance).toLocaleString() +
+    '，剩餘 NT$' + loanBalance.toLocaleString() +
+    '，約 ' + remainYears + ' 年 ' + remainMonths + ' 個月';
+  document.getElementById('l-progress-bar').style.width = progressPct + '%';
+  document.getElementById('l-paid-periods').textContent = paidPeriods;
+  document.getElementById('l-remain-periods').textContent = remainPeriods;
+
   document.getElementById('l-prin').textContent = fmt(l.curPrin);
   document.getElementById('l-int').textContent = fmt(l.curInt);
   document.getElementById('l-paid-prin').textContent = fmt(l.totalPrin);
@@ -294,6 +330,21 @@ async function fetchPrices() {
     document.getElementById('status').textContent = '價格載入失敗';
   }
 }
+
+let deferredPrompt;
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+  document.getElementById('install-banner').style.display = 'flex';
+});
+document.getElementById('install-btn').addEventListener('click', async () => {
+  if (deferredPrompt) {
+    deferredPrompt.prompt();
+    const { outcome } = await deferredPrompt.userChoice;
+    if (outcome === 'accepted') document.getElementById('install-banner').style.display = 'none';
+    deferredPrompt = null;
+  }
+});
 
 function showTab(name) {
   ['overview','loan'].forEach(t => {

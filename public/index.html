@@ -177,4 +177,185 @@ body { font-family: -apple-system, sans-serif; background: #f5f5f5; color: #111;
 
 <div id="tab-loan" style="display:none;">
   <div class="section" style="margin-top:1rem;">
-    <div
+    <div class="bar-wrap">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
+        <span style="font-size:14px;font-weight:600;">還款進度</span>
+        <span style="font-size:20px;font-weight:600;" id="l-progress-pct">—</span>
+      </div>
+      <div style="font-size:12px;color:#888;margin-bottom:10px;" id="l-progress-sub">—</div>
+      <div class="bar-track">
+        <div class="bar-fill-green" id="l-progress-bar" style="width:0%"></div>
+      </div>
+      <div class="progress-nums">
+        <div class="pn">已還 <span id="l-paid-periods">—</span> 期</div>
+        <div class="pn">剩餘 <span id="l-remain-periods">—</span> 期</div>
+        <div class="pn">共 <span>84 期</span></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">信貸基本資料</div>
+      <div class="row"><span class="rl">貸款本金</span><span class="rv">NT$997,000</span></div>
+      <div class="row"><span class="rl">年利率</span><span class="rv">2.8%</span></div>
+      <div class="row"><span class="rl">還款期數</span><span class="rv">84 期（7年）</span></div>
+      <div class="row"><span class="rl">已繳期數</span><span class="rv">2 期</span></div>
+      <div class="row"><span class="rl">貸款餘額</span><span class="rv warn">NT$978,409</span></div>
+    </div>
+    <div class="card">
+      <div class="card-title">每月還款明細</div>
+      <div class="row"><span class="rl">每月還款總額</span><span class="rv">NT$13,123</span></div>
+      <div class="row"><span class="rl">↳ 還本金</span><span class="rv pos" id="l-prin">—</span></div>
+      <div class="row"><span class="rl">↳ 付利息</span><span class="rv neg" id="l-int">—</span></div>
+    </div>
+    <div class="card">
+      <div class="card-title">已繳 2 期累計</div>
+      <div class="row"><span class="rl">已還本金</span><span class="rv pos" id="l-paid-prin">—</span></div>
+      <div class="row"><span class="rl">已付利息</span><span class="rv neg" id="l-paid-int">—</span></div>
+      <div class="row"><span class="rl">已繳總金額</span><span class="rv">NT$26,246</span></div>
+    </div>
+    <div class="install-banner" id="install-banner" style="display:none;">
+      <div class="install-icon">📈</div>
+      <div class="install-text">
+        <div class="install-title">加入主畫面</div>
+        <div class="install-sub">像 App 一樣快速開啟</div>
+      </div>
+      <button class="install-btn" id="install-btn">安裝</button>
+    </div>
+    <div class="card" style="margin-top:0.25rem;">
+      <div class="card-title">📱 加入手機主畫面</div>
+      <div style="font-size:13px;color:#666;line-height:1.8;">
+        <b>iPhone（Safari）：</b><br>
+        點底部 <b>分享按鈕 □↑</b> → 選「加入主畫面」<br><br>
+        <b>Android（Chrome）：</b><br>
+        點右上角 <b>⋮</b> → 選「新增至主畫面」
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const API_URL = 'https://investment-tracker-one-ashy.vercel.app/api/prices';
+const principal = 997000;
+const s919 = { shares: 17000, cost: 23.68, leverage: 1 };
+const s631 = { shares: 16000, cost: 34.74, leverage: 2 };
+const annualRate = 0.028, monthlyPayment = 13123, loanBalance = 978409, paidPeriods = 2, totalPeriods = 84;
+
+function fmt(n) { return 'NT$' + Math.round(n).toLocaleString(); }
+function pct(n) { return (n >= 0 ? '+' : '') + n.toFixed(2) + '%'; }
+
+function calcLoan() {
+  const r = annualRate / 12;
+  let bal = principal, tp = 0, ti = 0;
+  for (let i = 1; i <= paidPeriods; i++) {
+    const ip = bal * r, pp = monthlyPayment - ip;
+    tp += pp; ti += ip; bal -= pp;
+  }
+  const ci = loanBalance * r;
+  return { curPrin: monthlyPayment - ci, curInt: ci, totalPrin: tp, totalInt: ti };
+}
+
+function renderLoan() {
+  const l = calcLoan();
+  const progressPct = (paidPeriods / totalPeriods * 100).toFixed(1);
+  const remainPeriods = totalPeriods - paidPeriods;
+  const remainYears = Math.floor(remainPeriods / 12);
+  const remainMonths = remainPeriods % 12;
+  document.getElementById('l-progress-pct').textContent = progressPct + '%';
+  document.getElementById('l-progress-sub').textContent =
+    '已還 NT$' + Math.round(principal - loanBalance).toLocaleString() +
+    '，剩餘 NT$' + loanBalance.toLocaleString() +
+    '，約 ' + remainYears + ' 年 ' + remainMonths + ' 個月';
+  document.getElementById('l-progress-bar').style.width = progressPct + '%';
+  document.getElementById('l-paid-periods').textContent = paidPeriods;
+  document.getElementById('l-remain-periods').textContent = remainPeriods;
+  document.getElementById('l-prin').textContent = fmt(l.curPrin);
+  document.getElementById('l-int').textContent = fmt(l.curInt);
+  document.getElementById('l-paid-prin').textContent = fmt(l.totalPrin);
+  document.getElementById('l-paid-int').textContent = fmt(l.totalInt);
+}
+
+function renderPrices(p919, p631, dateStr) {
+  const mv919 = s919.shares * p919, mv631 = s631.shares * p631;
+  const c919 = s919.shares * s919.cost, c631 = s631.shares * s631.cost;
+  const pnl919 = mv919 - c919, pnl631 = mv631 - c631;
+  const totalMV = mv919 + mv631, totalCost = c919 + c631;
+  const totalPnl = totalMV - totalCost;
+  const totalRet = (totalPnl / totalCost) * 100;
+  const exp919 = mv919, exp631 = mv631 * 2;
+  const totalExp = exp919 + exp631;
+  const expRate = (totalExp / principal) * 100;
+  const cash = principal - totalCost;
+
+  const set = (id, val, cls) => {
+    const el = document.getElementById(id);
+    el.textContent = val;
+    if (cls) el.className = cls;
+  };
+
+  set('ov-invested', fmt(totalCost));
+  set('ov-cash', fmt(cash), 'metric-value pos');
+  set('ov-mv', fmt(totalMV));
+  set('ov-pnl', (totalPnl >= 0 ? '+NT$' : '-NT$') + Math.abs(Math.round(totalPnl)).toLocaleString(), 'metric-value ' + (totalPnl >= 0 ? 'pos' : 'neg'));
+  set('ov-ret', pct(totalRet), 'metric-value ' + (totalRet >= 0 ? 'pos' : 'neg'));
+  set('ov-exp', expRate.toFixed(1) + '%');
+  document.getElementById('ov-bar').style.width = Math.min(expRate / 2, 100) + '%';
+  set('ov-formula', '(' + fmt(mv631) + '×2 + ' + fmt(mv919) + '×1) ÷ NT$997,000 = ' + expRate.toFixed(1) + '%');
+
+  set('s631-price', 'NT$' + p631.toFixed(2));
+  set('s631-price2', 'NT$' + p631.toFixed(2));
+  set('s631-mv', fmt(mv631));
+  set('s631-pnl', (pnl631 >= 0 ? '+NT$' : '-NT$') + Math.abs(Math.round(pnl631)).toLocaleString(), (pnl631 >= 0 ? 'pos' : 'neg'));
+  set('s631-ret', pct((pnl631 / c631) * 100), (pnl631 >= 0 ? 'pos' : 'neg'));
+
+  set('s919-price', 'NT$' + p919.toFixed(2));
+  set('s919-price2', 'NT$' + p919.toFixed(2));
+  set('s919-mv', fmt(mv919));
+  set('s919-pnl', (pnl919 >= 0 ? '+NT$' : '-NT$') + Math.abs(Math.round(pnl919)).toLocaleString(), (pnl919 >= 0 ? 'pos' : 'neg'));
+  set('s919-ret', pct((pnl919 / c919) * 100), (pnl919 >= 0 ? 'pos' : 'neg'));
+
+  document.getElementById('dot').className = 'dot live';
+  document.getElementById('status').textContent = '收盤價更新：' + dateStr;
+}
+
+async function fetchPrices() {
+  try {
+    const resp = await fetch(API_URL);
+    const data = await resp.json();
+    const p919 = data.prices['00919']?.close;
+    const p631 = data.prices['00631L']?.close;
+    if (p919 && p631) renderPrices(p919, p631, data.prices['00919']?.date || '');
+    else throw new Error('no data');
+  } catch(e) {
+    document.getElementById('dot').className = 'dot err';
+    document.getElementById('status').textContent = '價格載入失敗';
+  }
+}
+
+let deferredPrompt;
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+  document.getElementById('install-banner').style.display = 'flex';
+});
+document.getElementById('install-btn').addEventListener('click', async () => {
+  if (deferredPrompt) {
+    deferredPrompt.prompt();
+    const { outcome } = await deferredPrompt.userChoice;
+    if (outcome === 'accepted') document.getElementById('install-banner').style.display = 'none';
+    deferredPrompt = null;
+  }
+});
+
+function showTab(name) {
+  ['overview','loan'].forEach(t => {
+    document.getElementById('tab-' + t).style.display = t === name ? 'block' : 'none';
+  });
+  document.querySelectorAll('.tab').forEach((el, i) => {
+    el.classList.toggle('active', ['overview','loan'][i] === name);
+  });
+}
+
+renderLoan();
+fetchPrices();
+</script>
+</body>
+</html>

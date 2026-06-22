@@ -111,7 +111,7 @@ body { font-family: -apple-system, sans-serif; background: #f5f5f5; color: #111;
             <span style="font-size:16px;font-weight:600;">00631L</span>
             <span class="badge ba">2× 槓桿</span>
           </div>
-          <div style="font-size:12px;color:#888;margin-top:2px;">元大台灣50正2・16,000 股</div>
+          <div style="font-size:12px;color:#888;margin-top:2px;">元大台灣50正2・18,000 股</div>
         </div>
         <div style="text-align:right;">
           <div style="font-size:11px;color:#888;">收盤價</div>
@@ -121,8 +121,8 @@ body { font-family: -apple-system, sans-serif; background: #f5f5f5; color: #111;
       <div class="stock-cols">
         <div class="stock-col">
           <div class="col-title">持股成本</div>
-          <div class="col-row"><span class="cl">均價</span><span class="cv">NT$34.74</span></div>
-          <div class="col-row"><span class="cl">總成本</span><span class="cv">NT$555,840</span></div>
+          <div class="col-row"><span class="cl">均價</span><span class="cv">NT$35.27</span></div>
+          <div class="col-row"><span class="cl">總成本</span><span class="cv">NT$634,825</span></div>
         </div>
         <div class="stock-col">
           <div class="col-title">持股市值</div>
@@ -145,7 +145,7 @@ body { font-family: -apple-system, sans-serif; background: #f5f5f5; color: #111;
             <span style="font-size:16px;font-weight:600;">00919</span>
             <span class="badge bg">1× 一般</span>
           </div>
-          <div style="font-size:12px;color:#888;margin-top:2px;">群益台灣精選高息・17,000 股</div>
+          <div style="font-size:12px;color:#888;margin-top:2px;">群益台灣精選高息・12,000 股</div>
         </div>
         <div style="text-align:right;">
           <div style="font-size:11px;color:#888;">收盤價</div>
@@ -156,7 +156,7 @@ body { font-family: -apple-system, sans-serif; background: #f5f5f5; color: #111;
         <div class="stock-col">
           <div class="col-title">持股成本</div>
           <div class="col-row"><span class="cl">均價</span><span class="cv">NT$23.68</span></div>
-          <div class="col-row"><span class="cl">總成本</span><span class="cv">NT$402,560</span></div>
+          <div class="col-row"><span class="cl">總成本</span><span class="cv">NT$284,160</span></div>
         </div>
         <div class="stock-col">
           <div class="col-title">持股市值</div>
@@ -235,8 +235,8 @@ body { font-family: -apple-system, sans-serif; background: #f5f5f5; color: #111;
 <script>
 const API_URL = 'https://investment-tracker-one-ashy.vercel.app/api/prices';
 const principal = 997000;
-const s919 = { shares: 17000, cost: 23.68, leverage: 1 };
-const s631 = { shares: 16000, cost: 34.74, leverage: 2 };
+const s919 = { shares: 12000, cost: 23.68, leverage: 1 };
+const s631 = { shares: 18000, cost: 35.27, leverage: 2 };
 const annualRate = 0.028, monthlyPayment = 13123, loanBalance = 978409, paidPeriods = 2, totalPeriods = 84;
 
 function fmt(n) { return 'NT$' + Math.round(n).toLocaleString(); }

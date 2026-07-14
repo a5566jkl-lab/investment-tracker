@@ -2,7 +2,7 @@ export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
 
   try {
-    const stocks = ['00919.TW', '00631L.TW'];
+    const stocks = ['00631L.TW', '00685L.TW'];
     const results = {};
 
     for (const symbol of stocks) {

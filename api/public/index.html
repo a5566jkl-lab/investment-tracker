@@ -4,6 +4,11 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>投資追蹤</title>
+<link rel="manifest" href="/manifest.json">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="投資追蹤">
+<meta name="theme-color" content="#ffffff">
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
 body { font-family: -apple-system, sans-serif; background: #f5f5f5; color: #111; }
@@ -17,10 +22,10 @@ body { font-family: -apple-system, sans-serif; background: #f5f5f5; color: #111;
 .tab { flex: 1; text-align: center; padding: 8px 0; font-size: 13px; color: #888; cursor: pointer; border-bottom: 2px solid transparent; }
 .tab.active { color: #111; border-bottom: 2px solid #111; font-weight: 500; }
 .section { padding: 1rem 1.25rem 0; max-width: 480px; margin: 0 auto; }
-.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 1rem; }
-.metric { background: #fff; border-radius: 10px; padding: 0.85rem 1rem; border: 1px solid #eee; }
-.metric-label { font-size: 12px; color: #888; margin-bottom: 4px; }
-.metric-value { font-size: 19px; font-weight: 600; }
+.grid3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin-bottom: 1rem; }
+.metric { background: #fff; border-radius: 10px; padding: 0.75rem 1rem; border: 1px solid #eee; }
+.metric-label { font-size: 11px; color: #888; margin-bottom: 4px; }
+.metric-value { font-size: 15px; font-weight: 600; }
 .card { background: #fff; border-radius: 12px; border: 1px solid #eee; padding: 1rem 1.25rem; margin-bottom: 0.75rem; }
 .card-title { font-size: 13px; color: #888; margin-bottom: 10px; }
 .row { display: flex; justify-content: space-between; align-items: center; padding: 7px 0; border-bottom: 1px solid #f0f0f0; }
@@ -32,38 +37,56 @@ body { font-family: -apple-system, sans-serif; background: #f5f5f5; color: #111;
 .warn { color: #BA7517; }
 .badge { font-size: 11px; padding: 2px 8px; border-radius: 4px; font-weight: 500; }
 .ba { background: #FAEEDA; color: #854F0B; }
-.bg { background: #EAF3DE; color: #3B6D11; }
 .stock-card { background: #fff; border-radius: 12px; border: 1px solid #eee; padding: 1rem 1.25rem; margin-bottom: 0.75rem; }
-.sg { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 0; border-top: 1px solid #f0f0f0; padding-top: 8px; margin-top: 8px; }
-.sl { font-size: 11px; color: #888; }
-.sv { font-size: 13px; font-weight: 500; }
+.stock-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; }
+.stock-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 0; border-top: 1px solid #f0f0f0; padding-top: 10px; margin-top: 4px; }
+.stock-col { padding: 0 0.5rem; }
+.stock-col:first-child { padding-left: 0; border-right: 1px solid #f0f0f0; }
+.stock-col:last-child { padding-right: 0; padding-left: 1rem; }
+.col-title { font-size: 11px; color: #aaa; margin-bottom: 6px; text-align: center; }
+.col-row { display: flex; justify-content: space-between; padding: 4px 0; }
+.cl { font-size: 12px; color: #888; }
+.cv { font-size: 12px; font-weight: 500; }
+.pnl-row { border-top: 1px solid #f0f0f0; margin-top: 8px; padding-top: 8px; display: flex; justify-content: space-between; align-items: center; }
 .bar-wrap { margin-bottom: 0.75rem; background: #fff; border-radius: 12px; border: 1px solid #eee; padding: 1rem 1.25rem; }
 .bar-track { height: 8px; background: #f0f0f0; border-radius: 4px; position: relative; margin: 10px 0 4px; }
 .bar-fill { height: 100%; border-radius: 4px; background: #EF9F27; transition: width 0.4s; }
+.bar-fill-green { height: 100%; border-radius: 4px; background: #1D9E75; transition: width 0.4s; }
 .bar-mid { position: absolute; top: -4px; left: 50%; width: 2px; height: 16px; background: #ccc; }
 .bar-labels { display: flex; justify-content: space-between; font-size: 11px; color: #888; }
-.total-footer { background: #f8f8f8; margin: 0.5rem -1.25rem -1rem; padding: 10px 1.25rem; border-radius: 0 0 12px 12px; display: flex; justify-content: space-between; align-items: center; }
+.progress-nums { display: flex; justify-content: space-between; margin-top: 8px; }
+.pn { font-size: 12px; color: #888; }
+.pn span { font-weight: 600; color: #111; }
+.install-banner { background: #fff; border-radius: 12px; border: 1px solid #eee; padding: 1rem 1.25rem; margin-bottom: 0.75rem; display: flex; align-items: center; gap: 12px; }
+.install-icon { width: 44px; height: 44px; background: #111; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 22px; flex-shrink: 0; }
+.install-text { flex: 1; }
+.install-title { font-size: 14px; font-weight: 600; margin-bottom: 2px; }
+.install-sub { font-size: 12px; color: #888; }
+.install-btn { background: #111; color: #fff; border: none; border-radius: 8px; padding: 8px 14px; font-size: 13px; cursor: pointer; flex-shrink: 0; }
 </style>
 </head>
 <body>
 
 <div class="header">
-  <div class="header-title">我的投資總覽</div>
+  <div class="header-title">投資追蹤</div>
   <div class="header-sub">
     <span class="dot" id="dot"></span>
     <span id="status">載入中...</span>
   </div>
   <div class="tabs">
     <div class="tab active" onclick="showTab('overview')">總覽</div>
-    <div class="tab" onclick="showTab('stocks')">持股</div>
     <div class="tab" onclick="showTab('loan')">信貸</div>
   </div>
 </div>
 
 <div id="tab-overview">
   <div class="section" style="margin-top:1rem;">
-    <div class="grid2">
-      <div class="metric"><div class="metric-label">投入本金</div><div class="metric-value">NT$997,000</div></div>
+    <div class="grid3">
+      <div class="metric"><div class="metric-label">可投入本金</div><div class="metric-value">NT$997,000</div></div>
+      <div class="metric"><div class="metric-label">已投入資金</div><div class="metric-value" id="ov-invested">—</div></div>
+      <div class="metric"><div class="metric-label">剩餘可用資金</div><div class="metric-value pos">NT$10,110</div></div>
+    </div>
+    <div class="grid3">
       <div class="metric"><div class="metric-label">持股市值</div><div class="metric-value" id="ov-mv">—</div></div>
       <div class="metric"><div class="metric-label">總損益</div><div class="metric-value" id="ov-pnl">—</div></div>
       <div class="metric"><div class="metric-label">報酬率</div><div class="metric-value" id="ov-ret">—</div></div>
@@ -78,4 +101,262 @@ body { font-family: -apple-system, sans-serif; background: #f5f5f5; color: #111;
         <div class="bar-mid"></div>
       </div>
       <div class="bar-labels"><span>0%</span><span>100%</span><span>200%</span></div>
-      <div style="font-size:12px;color:#
+      <div style="font-size:12px;color:#888;margin-top:8px;" id="ov-formula">—</div>
+    </div>
+
+    <div class="stock-card">
+      <div class="stock-top">
+        <div>
+          <div style="display:flex;align-items:center;gap:8px;">
+            <span style="font-size:16px;font-weight:600;">00631L</span>
+            <span class="badge ba">2× 槓桿</span>
+          </div>
+          <div style="font-size:12px;color:#888;margin-top:2px;">元大台灣50正2・26,000 股</div>
+        </div>
+        <div style="text-align:right;">
+          <div style="font-size:11px;color:#888;">收盤價</div>
+          <div style="font-size:18px;font-weight:600;" id="s631-price">—</div>
+        </div>
+      </div>
+      <div class="stock-cols">
+        <div class="stock-col">
+          <div class="col-title">持股成本</div>
+          <div class="col-row"><span class="cl">均價</span><span class="cv">NT$36.12</span></div>
+          <div class="col-row"><span class="cl">總成本</span><span class="cv">NT$939,120</span></div>
+        </div>
+        <div class="stock-col">
+          <div class="col-title">持股市值</div>
+          <div class="col-row"><span class="cl">現價</span><span class="cv" id="s631-price2">—</span></div>
+          <div class="col-row"><span class="cl">總市值</span><span class="cv" id="s631-mv">—</span></div>
+        </div>
+      </div>
+      <div class="pnl-row">
+        <span style="font-size:13px;color:#666;">損益</span>
+        <div style="text-align:right;">
+          <span style="font-size:16px;font-weight:600;" id="s631-pnl">—</span>
+          <span style="font-size:13px;margin-left:6px;" id="s631-ret">—</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="stock-card">
+      <div class="stock-top">
+        <div>
+          <div style="display:flex;align-items:center;gap:8px;">
+            <span style="font-size:16px;font-weight:600;">00685L</span>
+            <span class="badge ba">2× 槓桿</span>
+          </div>
+          <div style="font-size:12px;color:#888;margin-top:2px;">群益台灣加權正二・4,000 股</div>
+        </div>
+        <div style="text-align:right;">
+          <div style="font-size:11px;color:#888;">收盤價</div>
+          <div style="font-size:18px;font-weight:600;" id="s685-price">—</div>
+        </div>
+      </div>
+      <div class="stock-cols">
+        <div class="stock-col">
+          <div class="col-title">持股成本</div>
+          <div class="col-row"><span class="cl">均價</span><span class="cv">NT$11.94</span></div>
+          <div class="col-row"><span class="cl">總成本</span><span class="cv">NT$47,760</span></div>
+        </div>
+        <div class="stock-col">
+          <div class="col-title">持股市值</div>
+          <div class="col-row"><span class="cl">現價</span><span class="cv" id="s685-price2">—</span></div>
+          <div class="col-row"><span class="cl">總市值</span><span class="cv" id="s685-mv">—</span></div>
+        </div>
+      </div>
+      <div class="pnl-row">
+        <span style="font-size:13px;color:#666;">損益</span>
+        <div style="text-align:right;">
+          <span style="font-size:16px;font-weight:600;" id="s685-pnl">—</span>
+          <span style="font-size:13px;margin-left:6px;" id="s685-ret">—</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="tab-loan" style="display:none;">
+  <div class="section" style="margin-top:1rem;">
+    <div class="bar-wrap">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
+        <span style="font-size:14px;font-weight:600;">還款進度</span>
+        <span style="font-size:20px;font-weight:600;" id="l-progress-pct">—</span>
+      </div>
+      <div style="font-size:12px;color:#888;margin-bottom:10px;" id="l-progress-sub">—</div>
+      <div class="bar-track">
+        <div class="bar-fill-green" id="l-progress-bar" style="width:0%"></div>
+      </div>
+      <div class="progress-nums">
+        <div class="pn">已還 <span id="l-paid-periods">—</span> 期</div>
+        <div class="pn">剩餘 <span id="l-remain-periods">—</span> 期</div>
+        <div class="pn">共 <span>84 期</span></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">信貸基本資料</div>
+      <div class="row"><span class="rl">貸款本金</span><span class="rv">NT$997,000</span></div>
+      <div class="row"><span class="rl">年利率</span><span class="rv">2.8%</span></div>
+      <div class="row"><span class="rl">還款期數</span><span class="rv">84 期（7年）</span></div>
+      <div class="row"><span class="rl">已繳期數</span><span class="rv">3 期</span></div>
+      <div class="row"><span class="rl">貸款餘額</span><span class="rv warn">NT$967,613</span></div>
+    </div>
+    <div class="card">
+      <div class="card-title">每月還款明細</div>
+      <div class="row"><span class="rl">每月還款總額</span><span class="rv">NT$13,123</span></div>
+      <div class="row"><span class="rl">↳ 還本金</span><span class="rv pos" id="l-prin">—</span></div>
+      <div class="row"><span class="rl">↳ 付利息</span><span class="rv neg" id="l-int">—</span></div>
+    </div>
+    <div class="card">
+      <div class="card-title">已繳 3 期累計</div>
+      <div class="row"><span class="rl">已還本金</span><span class="rv pos" id="l-paid-prin">—</span></div>
+      <div class="row"><span class="rl">已付利息</span><span class="rv neg" id="l-paid-int">—</span></div>
+      <div class="row"><span class="rl">已繳總金額</span><span class="rv">NT$39,369</span></div>
+    </div>
+    <div class="install-banner" id="install-banner" style="display:none;">
+      <div class="install-icon">📈</div>
+      <div class="install-text">
+        <div class="install-title">加入主畫面</div>
+        <div class="install-sub">像 App 一樣快速開啟</div>
+      </div>
+      <button class="install-btn" id="install-btn">安裝</button>
+    </div>
+    <div class="card" style="margin-top:0.25rem;">
+      <div class="card-title">📱 加入手機主畫面</div>
+      <div style="font-size:13px;color:#666;line-height:1.8;">
+        <b>iPhone（Safari）：</b><br>
+        點底部 <b>分享按鈕 □↑</b> → 選「加入主畫面」<br><br>
+        <b>Android（Chrome）：</b><br>
+        點右上角 <b>⋮</b> → 選「新增至主畫面」
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const API_URL = 'https://investment-tracker-one-ashy.vercel.app/api/prices';
+const principal = 997000;
+const s631 = { shares: 26000, cost: 36.12, leverage: 2 };
+const s685 = { shares: 4000, cost: 11.94, leverage: 2 };
+const annualRate = 0.028, monthlyPayment = 13123, loanBalance = 967613, paidPeriods = 3, totalPeriods = 84;
+
+function fmt(n) { return 'NT$' + Math.round(n).toLocaleString(); }
+function pct(n) { return (n >= 0 ? '+' : '') + n.toFixed(2) + '%'; }
+
+function calcLoan() {
+  const r = annualRate / 12;
+  let bal = principal, tp = 0, ti = 0;
+  for (let i = 1; i <= paidPeriods; i++) {
+    const ip = bal * r, pp = monthlyPayment - ip;
+    tp += pp; ti += ip; bal -= pp;
+  }
+  const ci = loanBalance * r;
+  return { curPrin: monthlyPayment - ci, curInt: ci, totalPrin: tp, totalInt: ti };
+}
+
+function renderLoan() {
+  const l = calcLoan();
+  const progressPct = (paidPeriods / totalPeriods * 100).toFixed(1);
+  const remainPeriods = totalPeriods - paidPeriods;
+  const remainYears = Math.floor(remainPeriods / 12);
+  const remainMonths = remainPeriods % 12;
+  document.getElementById('l-progress-pct').textContent = progressPct + '%';
+  document.getElementById('l-progress-sub').textContent =
+    '已還 NT$' + Math.round(principal - loanBalance).toLocaleString() +
+    '，剩餘 NT$' + loanBalance.toLocaleString() +
+    '，約 ' + remainYears + ' 年 ' + remainMonths + ' 個月';
+  document.getElementById('l-progress-bar').style.width = progressPct + '%';
+  document.getElementById('l-paid-periods').textContent = paidPeriods;
+  document.getElementById('l-remain-periods').textContent = remainPeriods;
+  document.getElementById('l-prin').textContent = fmt(l.curPrin);
+  document.getElementById('l-int').textContent = fmt(l.curInt);
+  document.getElementById('l-paid-prin').textContent = fmt(l.totalPrin);
+  document.getElementById('l-paid-int').textContent = fmt(l.totalInt);
+}
+
+function renderPrices(p631, p685, dateStr) {
+  const mv631 = s631.shares * p631;
+  const mv685 = s685.shares * p685;
+  const c631 = s631.shares * s631.cost;
+  const c685 = s685.shares * s685.cost;
+  const pnl631 = mv631 - c631, pnl685 = mv685 - c685;
+  const totalMV = mv631 + mv685;
+  const totalCost = c631 + c685;
+  const totalPnl = totalMV - totalCost;
+  const totalRet = (totalPnl / totalCost) * 100;
+  const totalExp = (mv631 + mv685) * 2;
+  const expRate = (totalExp / principal) * 100;
+
+  const set = (id, val, cls) => {
+    const el = document.getElementById(id);
+    el.textContent = val;
+    if (cls) el.className = cls;
+  };
+
+  set('ov-invested', fmt(totalCost));
+  set('ov-mv', fmt(totalMV));
+  set('ov-pnl', (totalPnl >= 0 ? '+NT$' : '-NT$') + Math.abs(Math.round(totalPnl)).toLocaleString(), 'metric-value ' + (totalPnl >= 0 ? 'pos' : 'neg'));
+  set('ov-ret', pct(totalRet), 'metric-value ' + (totalRet >= 0 ? 'pos' : 'neg'));
+  set('ov-exp', expRate.toFixed(1) + '%');
+  document.getElementById('ov-bar').style.width = Math.min(expRate / 2, 100) + '%';
+  set('ov-formula', '(' + fmt(mv631) + ' + ' + fmt(mv685) + ') ×2 ÷ NT$997,000 = ' + expRate.toFixed(1) + '%');
+
+  set('s631-price', 'NT$' + p631.toFixed(2));
+  set('s631-price2', 'NT$' + p631.toFixed(2));
+  set('s631-mv', fmt(mv631));
+  set('s631-pnl', (pnl631 >= 0 ? '+NT$' : '-NT$') + Math.abs(Math.round(pnl631)).toLocaleString(), pnl631 >= 0 ? 'pos' : 'neg');
+  set('s631-ret', pct((pnl631 / c631) * 100), pnl631 >= 0 ? 'pos' : 'neg');
+
+  set('s685-price', 'NT$' + p685.toFixed(2));
+  set('s685-price2', 'NT$' + p685.toFixed(2));
+  set('s685-mv', fmt(mv685));
+  set('s685-pnl', (pnl685 >= 0 ? '+NT$' : '-NT$') + Math.abs(Math.round(pnl685)).toLocaleString(), pnl685 >= 0 ? 'pos' : 'neg');
+  set('s685-ret', pct((pnl685 / c685) * 100), pnl685 >= 0 ? 'pos' : 'neg');
+
+  document.getElementById('dot').className = 'dot live';
+  document.getElementById('status').textContent = '收盤價更新：' + dateStr;
+}
+
+async function fetchPrices() {
+  try {
+    const resp = await fetch(API_URL);
+    const data = await resp.json();
+    const p631 = data.prices['00631L']?.close;
+    const p685 = data.prices['00685L']?.close;
+    if (p631 && p685) renderPrices(p631, p685, data.prices['00631L']?.date || '');
+    else throw new Error('no data');
+  } catch(e) {
+    document.getElementById('dot').className = 'dot err';
+    document.getElementById('status').textContent = '價格載入失敗';
+  }
+}
+
+let deferredPrompt;
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+  document.getElementById('install-banner').style.display = 'flex';
+});
+document.getElementById('install-btn').addEventListener('click', async () => {
+  if (deferredPrompt) {
+    deferredPrompt.prompt();
+    const { outcome } = await deferredPrompt.userChoice;
+    if (outcome === 'accepted') document.getElementById('install-banner').style.display = 'none';
+    deferredPrompt = null;
+  }
+});
+
+function showTab(name) {
+  ['overview','loan'].forEach(t => {
+    document.getElementById('tab-' + t).style.display = t === name ? 'block' : 'none';
+  });
+  document.querySelectorAll('.tab').forEach((el, i) => {
+    el.classList.toggle('active', ['overview','loan'][i] === name);
+  });
+}
+
+renderLoan();
+fetchPrices();
+</script>
+</body>
+</html>

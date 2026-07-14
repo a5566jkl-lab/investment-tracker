@@ -23,7 +23,6 @@ body { font-family: -apple-system, sans-serif; background: #f5f5f5; color: #111;
 .tab.active { color: #111; border-bottom: 2px solid #111; font-weight: 500; }
 .section { padding: 1rem 1.25rem 0; max-width: 480px; margin: 0 auto; }
 .grid3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin-bottom: 1rem; }
-.grid2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin-bottom: 1rem; }
 .metric { background: #fff; border-radius: 10px; padding: 0.75rem 1rem; border: 1px solid #eee; }
 .metric-label { font-size: 11px; color: #888; margin-bottom: 4px; }
 .metric-value { font-size: 15px; font-weight: 600; }
@@ -85,7 +84,7 @@ body { font-family: -apple-system, sans-serif; background: #f5f5f5; color: #111;
     <div class="grid3">
       <div class="metric"><div class="metric-label">可投入本金</div><div class="metric-value">NT$997,000</div></div>
       <div class="metric"><div class="metric-label">已投入資金</div><div class="metric-value" id="ov-invested">—</div></div>
-      <div class="metric"><div class="metric-label">剩餘可用資金</div><div class="metric-value pos">NT$112,715</div></div>
+      <div class="metric"><div class="metric-label">剩餘可用資金</div><div class="metric-value pos">NT$10,110</div></div>
     </div>
     <div class="grid3">
       <div class="metric"><div class="metric-label">持股市值</div><div class="metric-value" id="ov-mv">—</div></div>
@@ -104,6 +103,7 @@ body { font-family: -apple-system, sans-serif; background: #f5f5f5; color: #111;
       <div class="bar-labels"><span>0%</span><span>100%</span><span>200%</span></div>
       <div style="font-size:12px;color:#888;margin-top:8px;" id="ov-formula">—</div>
     </div>
+
     <div class="stock-card">
       <div class="stock-top">
         <div>
@@ -111,7 +111,7 @@ body { font-family: -apple-system, sans-serif; background: #f5f5f5; color: #111;
             <span style="font-size:16px;font-weight:600;">00631L</span>
             <span class="badge ba">2× 槓桿</span>
           </div>
-          <div style="font-size:12px;color:#888;margin-top:2px;">元大台灣50正2・24,000 股</div>
+          <div style="font-size:12px;color:#888;margin-top:2px;">元大台灣50正2・26,000 股</div>
         </div>
         <div style="text-align:right;">
           <div style="font-size:11px;color:#888;">收盤價</div>
@@ -121,8 +121,8 @@ body { font-family: -apple-system, sans-serif; background: #f5f5f5; color: #111;
       <div class="stock-cols">
         <div class="stock-col">
           <div class="col-title">持股成本</div>
-          <div class="col-row"><span class="cl">均價</span><span class="cv">NT$36.02</span></div>
-          <div class="col-row"><span class="cl">總成本</span><span class="cv">NT$864,480</span></div>
+          <div class="col-row"><span class="cl">均價</span><span class="cv">NT$36.12</span></div>
+          <div class="col-row"><span class="cl">總成本</span><span class="cv">NT$939,120</span></div>
         </div>
         <div class="stock-col">
           <div class="col-title">持股市值</div>
@@ -135,6 +135,41 @@ body { font-family: -apple-system, sans-serif; background: #f5f5f5; color: #111;
         <div style="text-align:right;">
           <span style="font-size:16px;font-weight:600;" id="s631-pnl">—</span>
           <span style="font-size:13px;margin-left:6px;" id="s631-ret">—</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="stock-card">
+      <div class="stock-top">
+        <div>
+          <div style="display:flex;align-items:center;gap:8px;">
+            <span style="font-size:16px;font-weight:600;">00685L</span>
+            <span class="badge ba">2× 槓桿</span>
+          </div>
+          <div style="font-size:12px;color:#888;margin-top:2px;">群益台灣加權正二・4,000 股</div>
+        </div>
+        <div style="text-align:right;">
+          <div style="font-size:11px;color:#888;">收盤價</div>
+          <div style="font-size:18px;font-weight:600;" id="s685-price">—</div>
+        </div>
+      </div>
+      <div class="stock-cols">
+        <div class="stock-col">
+          <div class="col-title">持股成本</div>
+          <div class="col-row"><span class="cl">均價</span><span class="cv">NT$11.94</span></div>
+          <div class="col-row"><span class="cl">總成本</span><span class="cv">NT$47,760</span></div>
+        </div>
+        <div class="stock-col">
+          <div class="col-title">持股市值</div>
+          <div class="col-row"><span class="cl">現價</span><span class="cv" id="s685-price2">—</span></div>
+          <div class="col-row"><span class="cl">總市值</span><span class="cv" id="s685-mv">—</span></div>
+        </div>
+      </div>
+      <div class="pnl-row">
+        <span style="font-size:13px;color:#666;">損益</span>
+        <div style="text-align:right;">
+          <span style="font-size:16px;font-weight:600;" id="s685-pnl">—</span>
+          <span style="font-size:13px;margin-left:6px;" id="s685-ret">—</span>
         </div>
       </div>
     </div>
@@ -201,7 +236,8 @@ body { font-family: -apple-system, sans-serif; background: #f5f5f5; color: #111;
 <script>
 const API_URL = 'https://investment-tracker-one-ashy.vercel.app/api/prices';
 const principal = 997000;
-const s631 = { shares: 24000, cost: 36.02, leverage: 2 };
+const s631 = { shares: 26000, cost: 36.12, leverage: 2 };
+const s685 = { shares: 4000, cost: 11.94, leverage: 2 };
 const annualRate = 0.028, monthlyPayment = 13123, loanBalance = 967613, paidPeriods = 3, totalPeriods = 84;
 
 function fmt(n) { return 'NT$' + Math.round(n).toLocaleString(); }
@@ -238,13 +274,18 @@ function renderLoan() {
   document.getElementById('l-paid-int').textContent = fmt(l.totalInt);
 }
 
-function renderPrices(p631, dateStr) {
+function renderPrices(p631, p685, dateStr) {
   const mv631 = s631.shares * p631;
+  const mv685 = s685.shares * p685;
   const c631 = s631.shares * s631.cost;
-  const pnl631 = mv631 - c631;
-  const totalRet = (pnl631 / c631) * 100;
-  const exp631 = mv631 * 2;
-  const expRate = (exp631 / principal) * 100;
+  const c685 = s685.shares * s685.cost;
+  const pnl631 = mv631 - c631, pnl685 = mv685 - c685;
+  const totalMV = mv631 + mv685;
+  const totalCost = c631 + c685;
+  const totalPnl = totalMV - totalCost;
+  const totalRet = (totalPnl / totalCost) * 100;
+  const totalExp = (mv631 + mv685) * 2;
+  const expRate = (totalExp / principal) * 100;
 
   const set = (id, val, cls) => {
     const el = document.getElementById(id);
@@ -252,19 +293,25 @@ function renderPrices(p631, dateStr) {
     if (cls) el.className = cls;
   };
 
-  set('ov-invested', fmt(c631));
-  set('ov-mv', fmt(mv631));
-  set('ov-pnl', (pnl631 >= 0 ? '+NT$' : '-NT$') + Math.abs(Math.round(pnl631)).toLocaleString(), 'metric-value ' + (pnl631 >= 0 ? 'pos' : 'neg'));
+  set('ov-invested', fmt(totalCost));
+  set('ov-mv', fmt(totalMV));
+  set('ov-pnl', (totalPnl >= 0 ? '+NT$' : '-NT$') + Math.abs(Math.round(totalPnl)).toLocaleString(), 'metric-value ' + (totalPnl >= 0 ? 'pos' : 'neg'));
   set('ov-ret', pct(totalRet), 'metric-value ' + (totalRet >= 0 ? 'pos' : 'neg'));
   set('ov-exp', expRate.toFixed(1) + '%');
   document.getElementById('ov-bar').style.width = Math.min(expRate / 2, 100) + '%';
-  set('ov-formula', fmt(mv631) + '×2 ÷ NT$997,000 = ' + expRate.toFixed(1) + '%');
+  set('ov-formula', '(' + fmt(mv631) + ' + ' + fmt(mv685) + ') ×2 ÷ NT$997,000 = ' + expRate.toFixed(1) + '%');
 
   set('s631-price', 'NT$' + p631.toFixed(2));
   set('s631-price2', 'NT$' + p631.toFixed(2));
   set('s631-mv', fmt(mv631));
-  set('s631-pnl', (pnl631 >= 0 ? '+NT$' : '-NT$') + Math.abs(Math.round(pnl631)).toLocaleString(), (pnl631 >= 0 ? 'pos' : 'neg'));
-  set('s631-ret', pct((pnl631 / c631) * 100), (pnl631 >= 0 ? 'pos' : 'neg'));
+  set('s631-pnl', (pnl631 >= 0 ? '+NT$' : '-NT$') + Math.abs(Math.round(pnl631)).toLocaleString(), pnl631 >= 0 ? 'pos' : 'neg');
+  set('s631-ret', pct((pnl631 / c631) * 100), pnl631 >= 0 ? 'pos' : 'neg');
+
+  set('s685-price', 'NT$' + p685.toFixed(2));
+  set('s685-price2', 'NT$' + p685.toFixed(2));
+  set('s685-mv', fmt(mv685));
+  set('s685-pnl', (pnl685 >= 0 ? '+NT$' : '-NT$') + Math.abs(Math.round(pnl685)).toLocaleString(), pnl685 >= 0 ? 'pos' : 'neg');
+  set('s685-ret', pct((pnl685 / c685) * 100), pnl685 >= 0 ? 'pos' : 'neg');
 
   document.getElementById('dot').className = 'dot live';
   document.getElementById('status').textContent = '收盤價更新：' + dateStr;
@@ -275,7 +322,8 @@ async function fetchPrices() {
     const resp = await fetch(API_URL);
     const data = await resp.json();
     const p631 = data.prices['00631L']?.close;
-    if (p631) renderPrices(p631, data.prices['00631L']?.date || '');
+    const p685 = data.prices['00685L']?.close;
+    if (p631 && p685) renderPrices(p631, p685, data.prices['00631L']?.date || '');
     else throw new Error('no data');
   } catch(e) {
     document.getElementById('dot').className = 'dot err';

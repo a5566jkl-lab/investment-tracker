@@ -59,7 +59,6 @@ body { font-family: -apple-system, sans-serif; background: #f5f5f5; color: #111;
 .pn { font-size: 12px; color: #888; }
 .pn span { font-weight: 600; color: #111; }
 .note { background: #f8f8f8; border-radius: 8px; padding: 8px 12px; margin-bottom: 0.75rem; font-size: 12px; color: #888; text-align: center; }
-.empty-card { background: #fff; border-radius: 12px; border: 1px solid #eee; padding: 2rem 1.25rem; margin-bottom: 0.75rem; text-align: center; color: #bbb; font-size: 13px; }
 .install-banner { background: #fff; border-radius: 12px; border: 1px solid #eee; padding: 1rem 1.25rem; margin-bottom: 0.75rem; display: flex; align-items: center; gap: 12px; }
 .install-icon { width: 44px; height: 44px; background: #111; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 22px; flex-shrink: 0; }
 .install-text { flex: 1; }
@@ -103,19 +102,13 @@ body { font-family: -apple-system, sans-serif; background: #f5f5f5; color: #111;
         <span style="font-size:14px;color:#666;">曝險率</span>
         <span style="font-size:22px;font-weight:600;" id="a-exp">—</span>
       </div>
-      <div class="bar-track">
-        <div class="bar-fill" id="a-bar" style="width:0%"></div>
-        <div class="bar-mid"></div>
-      </div>
+      <div class="bar-track"><div class="bar-fill" id="a-bar" style="width:0%"></div><div class="bar-mid"></div></div>
       <div class="bar-labels"><span>0%</span><span>100%</span><span>200%</span></div>
       <div style="font-size:12px;color:#888;margin-top:8px;" id="a-formula">—</div>
     </div>
     <div class="stock-card">
       <div class="stock-top">
-        <div>
-          <div style="display:flex;align-items:center;gap:8px;"><span style="font-size:16px;font-weight:600;">00631L</span><span class="badge ba">2× 槓桿</span></div>
-          <div style="font-size:12px;color:#888;margin-top:2px;">元大台灣50正2・26,000 股</div>
-        </div>
+        <div><div style="display:flex;align-items:center;gap:8px;"><span style="font-size:16px;font-weight:600;">00631L</span><span class="badge ba">2× 槓桿</span></div><div style="font-size:12px;color:#888;margin-top:2px;">元大台灣50正2・26,000 股</div></div>
         <div style="text-align:right;"><div style="font-size:11px;color:#888;">收盤價</div><div style="font-size:18px;font-weight:600;" id="a-p631">—</div></div>
       </div>
       <div class="stock-cols">
@@ -126,10 +119,7 @@ body { font-family: -apple-system, sans-serif; background: #f5f5f5; color: #111;
     </div>
     <div class="stock-card">
       <div class="stock-top">
-        <div>
-          <div style="display:flex;align-items:center;gap:8px;"><span style="font-size:16px;font-weight:600;">00685L</span><span class="badge ba">2× 槓桿</span></div>
-          <div style="font-size:12px;color:#888;margin-top:2px;">群益台灣加權正二・6,000 股</div>
-        </div>
+        <div><div style="display:flex;align-items:center;gap:8px;"><span style="font-size:16px;font-weight:600;">00685L</span><span class="badge ba">2× 槓桿</span></div><div style="font-size:12px;color:#888;margin-top:2px;">群益台灣加權正二・6,000 股</div></div>
         <div style="text-align:right;"><div style="font-size:11px;color:#888;">收盤價</div><div style="font-size:18px;font-weight:600;" id="a-p685">—</div></div>
       </div>
       <div class="stock-cols">
@@ -160,26 +150,31 @@ body { font-family: -apple-system, sans-serif; background: #f5f5f5; color: #111;
         <span style="font-size:14px;color:#666;">曝險率</span>
         <span style="font-size:22px;font-weight:600;" id="b-exp">—</span>
       </div>
-      <div class="bar-track">
-        <div class="bar-fill" id="b-bar" style="width:0%"></div>
-        <div class="bar-mid"></div>
-      </div>
+      <div class="bar-track"><div class="bar-fill" id="b-bar" style="width:0%"></div><div class="bar-mid"></div></div>
       <div class="bar-labels"><span>0%</span><span>100%</span><span>200%</span></div>
       <div style="font-size:12px;color:#888;margin-top:8px;" id="b-formula">—</div>
     </div>
     <div class="stock-card">
       <div class="stock-top">
-        <div>
-          <div style="display:flex;align-items:center;gap:8px;"><span style="font-size:16px;font-weight:600;">00631L</span><span class="badge ba">2× 槓桿</span></div>
-          <div style="font-size:12px;color:#888;margin-top:2px;">元大台灣50正2・11,000 股</div>
-        </div>
+        <div><div style="display:flex;align-items:center;gap:8px;"><span style="font-size:16px;font-weight:600;">00631L</span><span class="badge ba">2× 槓桿</span></div><div style="font-size:12px;color:#888;margin-top:2px;">元大台灣50正2・15,000 股</div></div>
         <div style="text-align:right;"><div style="font-size:11px;color:#888;">收盤價</div><div style="font-size:18px;font-weight:600;" id="b-p631">—</div></div>
       </div>
       <div class="stock-cols">
-        <div class="stock-col"><div class="col-title">持股成本</div><div class="col-row"><span class="cl">均價</span><span class="cv">NT$34.85</span></div><div class="col-row"><span class="cl">總成本</span><span class="cv">NT$383,350</span></div></div>
+        <div class="stock-col"><div class="col-title">持股成本</div><div class="col-row"><span class="cl">均價</span><span class="cv">NT$33.70</span></div><div class="col-row"><span class="cl">總成本</span><span class="cv">NT$505,500</span></div></div>
         <div class="stock-col"><div class="col-title">持股市值</div><div class="col-row"><span class="cl">現價</span><span class="cv" id="b-p631b">—</span></div><div class="col-row"><span class="cl">總市值</span><span class="cv" id="b-mv631">—</span></div></div>
       </div>
       <div class="pnl-row"><span style="font-size:13px;color:#666;">損益</span><div style="text-align:right;"><span style="font-size:16px;font-weight:600;" id="b-pnl631">—</span><span style="font-size:13px;margin-left:6px;" id="b-ret631">—</span></div></div>
+    </div>
+    <div class="stock-card">
+      <div class="stock-top">
+        <div><div style="display:flex;align-items:center;gap:8px;"><span style="font-size:16px;font-weight:600;">00685L</span><span class="badge ba">2× 槓桿</span></div><div style="font-size:12px;color:#888;margin-top:2px;">群益台灣加權正二・4,000 股</div></div>
+        <div style="text-align:right;"><div style="font-size:11px;color:#888;">收盤價</div><div style="font-size:18px;font-weight:600;" id="b-p685">—</div></div>
+      </div>
+      <div class="stock-cols">
+        <div class="stock-col"><div class="col-title">持股成本</div><div class="col-row"><span class="cl">均價</span><span class="cv">NT$9.94</span></div><div class="col-row"><span class="cl">總成本</span><span class="cv">NT$39,760</span></div></div>
+        <div class="stock-col"><div class="col-title">持股市值</div><div class="col-row"><span class="cl">現價</span><span class="cv" id="b-p685b">—</span></div><div class="col-row"><span class="cl">總市值</span><span class="cv" id="b-mv685">—</span></div></div>
+      </div>
+      <div class="pnl-row"><span style="font-size:13px;color:#666;">損益</span><div style="text-align:right;"><span style="font-size:16px;font-weight:600;" id="b-pnl685">—</span><span style="font-size:13px;margin-left:6px;" id="b-ret685">—</span></div></div>
     </div>
   </div>
 </div>
@@ -200,37 +195,28 @@ body { font-family: -apple-system, sans-serif; background: #f5f5f5; color: #111;
         <span style="font-size:14px;color:#666;">合計曝險率</span>
         <span style="font-size:22px;font-weight:600;" id="c-exp">—</span>
       </div>
-      <div class="bar-track">
-        <div class="bar-fill" id="c-bar" style="width:0%"></div>
-        <div class="bar-mid"></div>
-      </div>
+      <div class="bar-track"><div class="bar-fill" id="c-bar" style="width:0%"></div><div class="bar-mid"></div></div>
       <div class="bar-labels"><span>0%</span><span>100%</span><span>200%</span></div>
       <div style="font-size:12px;color:#888;margin-top:8px;" id="c-formula">—</div>
     </div>
     <div class="stock-card">
       <div class="stock-top">
-        <div>
-          <div style="display:flex;align-items:center;gap:8px;"><span style="font-size:16px;font-weight:600;">00631L</span><span class="badge ba">2× 槓桿</span></div>
-          <div style="font-size:12px;color:#888;margin-top:2px;">合計 37,000 股（26,000 + 11,000）</div>
-        </div>
+        <div><div style="display:flex;align-items:center;gap:8px;"><span style="font-size:16px;font-weight:600;">00631L</span><span class="badge ba">2× 槓桿</span></div><div style="font-size:12px;color:#888;margin-top:2px;">合計 41,000 股（26,000 + 15,000）</div></div>
         <div style="text-align:right;"><div style="font-size:11px;color:#888;">收盤價</div><div style="font-size:18px;font-weight:600;" id="c-p631">—</div></div>
       </div>
       <div class="stock-cols">
-        <div class="stock-col"><div class="col-title">持股成本</div><div class="col-row"><span class="cl">加權均價</span><span class="cv">NT$35.72</span></div><div class="col-row"><span class="cl">總成本</span><span class="cv">NT$1,322,470</span></div></div>
+        <div class="stock-col"><div class="col-title">持股成本</div><div class="col-row"><span class="cl">加權均價</span><span class="cv">NT$35.27</span></div><div class="col-row"><span class="cl">總成本</span><span class="cv">NT$1,444,620</span></div></div>
         <div class="stock-col"><div class="col-title">持股市值</div><div class="col-row"><span class="cl">現價</span><span class="cv" id="c-p631b">—</span></div><div class="col-row"><span class="cl">總市值</span><span class="cv" id="c-mv631">—</span></div></div>
       </div>
       <div class="pnl-row"><span style="font-size:13px;color:#666;">損益</span><div style="text-align:right;"><span style="font-size:16px;font-weight:600;" id="c-pnl631">—</span><span style="font-size:13px;margin-left:6px;" id="c-ret631">—</span></div></div>
     </div>
     <div class="stock-card">
       <div class="stock-top">
-        <div>
-          <div style="display:flex;align-items:center;gap:8px;"><span style="font-size:16px;font-weight:600;">00685L</span><span class="badge ba">2× 槓桿</span></div>
-          <div style="font-size:12px;color:#888;margin-top:2px;">元大信貸・6,000 股</div>
-        </div>
+        <div><div style="display:flex;align-items:center;gap:8px;"><span style="font-size:16px;font-weight:600;">00685L</span><span class="badge ba">2× 槓桿</span></div><div style="font-size:12px;color:#888;margin-top:2px;">合計 10,000 股（6,000 + 4,000）</div></div>
         <div style="text-align:right;"><div style="font-size:11px;color:#888;">收盤價</div><div style="font-size:18px;font-weight:600;" id="c-p685">—</div></div>
       </div>
       <div class="stock-cols">
-        <div class="stock-col"><div class="col-title">持股成本</div><div class="col-row"><span class="cl">均價</span><span class="cv">NT$11.64</span></div><div class="col-row"><span class="cl">總成本</span><span class="cv">NT$69,840</span></div></div>
+        <div class="stock-col"><div class="col-title">持股成本</div><div class="col-row"><span class="cl">加權均價</span><span class="cv">NT$10.96</span></div><div class="col-row"><span class="cl">總成本</span><span class="cv">NT$109,600</span></div></div>
         <div class="stock-col"><div class="col-title">持股市值</div><div class="col-row"><span class="cl">現價</span><span class="cv" id="c-p685b">—</span></div><div class="col-row"><span class="cl">總市值</span><span class="cv" id="c-mv685">—</span></div></div>
       </div>
       <div class="pnl-row"><span style="font-size:13px;color:#666;">損益</span><div style="text-align:right;"><span style="font-size:16px;font-weight:600;" id="c-pnl685">—</span><span style="font-size:13px;margin-left:6px;" id="c-ret685">—</span></div></div>
@@ -295,7 +281,8 @@ const principalB = 1115845;
 const principalC = principalA + principalB;
 const a631 = { shares: 26000, cost: 36.12 };
 const a685 = { shares: 6000, cost: 11.64 };
-const b631 = { shares: 11000, cost: 34.85 };
+const b631 = { shares: 15000, cost: 33.70 };
+const b685 = { shares: 4000, cost: 9.94 };
 const annualRate = 0.028, monthlyPayment = 13123, loanBalance = 967613, paidPeriods = 3, totalPeriods = 84;
 
 function fmt(n) { return 'NT$' + Math.round(n).toLocaleString(); }
@@ -339,13 +326,14 @@ function renderPrices(p631, p685, dateStr) {
   const ma631 = a631.shares * p631, ca631 = a631.shares * a631.cost;
   const ma685 = a685.shares * p685, ca685 = a685.shares * a685.cost;
   const mb631 = b631.shares * p631, cb631 = b631.shares * b631.cost;
+  const mb685 = b685.shares * p685, cb685 = b685.shares * b685.cost;
 
   const aCost = ca631 + ca685, aMV = ma631 + ma685;
   const aPnl = aMV - aCost, aRet = aPnl / aCost * 100;
   const aExpRate = (aMV * 2) / principalA * 100;
   const aCash = principalA - aCost;
 
-  const bCost = cb631, bMV = mb631;
+  const bCost = cb631 + cb685, bMV = mb631 + mb685;
   const bPnl = bMV - bCost, bRet = bPnl / bCost * 100;
   const bExpRate = (bMV * 2) / principalB * 100;
   const bCash = principalB - bCost;
@@ -353,8 +341,8 @@ function renderPrices(p631, p685, dateStr) {
   const cCost = aCost + bCost, cMV = aMV + bMV;
   const cPnl = cMV - cCost, cRet = cPnl / cCost * 100;
   const cExpRate = (cMV * 2) / principalC * 100;
-  const c631MV = ma631 + mb631, c631Cost = ca631 + cb631;
-  const c631Pnl = c631MV - c631Cost;
+  const c631MV = ma631 + mb631, c631Cost = ca631 + cb631, c631Pnl = c631MV - c631Cost;
+  const c685MV = ma685 + mb685, c685Cost = ca685 + cb685, c685Pnl = c685MV - c685Cost;
 
   set('a-cash', fmt(aCash), aCash >= 0 ? 'metric-value pos' : 'metric-value neg');
   set('a-invested', fmt(aCost));
@@ -364,12 +352,12 @@ function renderPrices(p631, p685, dateStr) {
   set('a-exp', aExpRate.toFixed(1)+'%');
   document.getElementById('a-bar').style.width = Math.min(aExpRate/2,100)+'%';
   set('a-formula', '('+fmt(ma631)+' + '+fmt(ma685)+') ×2 ÷ NT$997,000 = '+aExpRate.toFixed(1)+'%');
-  set('a-p631', 'NT$'+p631.toFixed(2)); set('a-p631b', 'NT$'+p631.toFixed(2)); set('a-mv631', fmt(ma631));
-  set('a-pnl631', (ma631-ca631>=0?'+NT$':'-NT$')+Math.abs(Math.round(ma631-ca631)).toLocaleString(), ma631-ca631>=0?'pos':'neg');
-  set('a-ret631', pct((ma631-ca631)/ca631*100), ma631-ca631>=0?'pos':'neg');
-  set('a-p685', 'NT$'+p685.toFixed(2)); set('a-p685b', 'NT$'+p685.toFixed(2)); set('a-mv685', fmt(ma685));
-  set('a-pnl685', (ma685-ca685>=0?'+NT$':'-NT$')+Math.abs(Math.round(ma685-ca685)).toLocaleString(), ma685-ca685>=0?'pos':'neg');
-  set('a-ret685', pct((ma685-ca685)/ca685*100), ma685-ca685>=0?'pos':'neg');
+  set('a-p631','NT$'+p631.toFixed(2)); set('a-p631b','NT$'+p631.toFixed(2)); set('a-mv631',fmt(ma631));
+  set('a-pnl631',(ma631-ca631>=0?'+NT$':'-NT$')+Math.abs(Math.round(ma631-ca631)).toLocaleString(), ma631-ca631>=0?'pos':'neg');
+  set('a-ret631',pct((ma631-ca631)/ca631*100), ma631-ca631>=0?'pos':'neg');
+  set('a-p685','NT$'+p685.toFixed(2)); set('a-p685b','NT$'+p685.toFixed(2)); set('a-mv685',fmt(ma685));
+  set('a-pnl685',(ma685-ca685>=0?'+NT$':'-NT$')+Math.abs(Math.round(ma685-ca685)).toLocaleString(), ma685-ca685>=0?'pos':'neg');
+  set('a-ret685',pct((ma685-ca685)/ca685*100), ma685-ca685>=0?'pos':'neg');
 
   set('b-cash', fmt(bCash), bCash >= 0 ? 'metric-value pos' : 'metric-value neg');
   set('b-invested', fmt(bCost));
@@ -378,23 +366,26 @@ function renderPrices(p631, p685, dateStr) {
   set('b-ret', pct(bRet), 'metric-value '+(bRet>=0?'pos':'neg'));
   set('b-exp', bExpRate.toFixed(1)+'%');
   document.getElementById('b-bar').style.width = Math.min(bExpRate/2,100)+'%';
-  set('b-formula', fmt(bMV)+' ×2 ÷ NT$1,115,845 = '+bExpRate.toFixed(1)+'%');
-  set('b-p631', 'NT$'+p631.toFixed(2)); set('b-p631b', 'NT$'+p631.toFixed(2)); set('b-mv631', fmt(mb631));
-  set('b-pnl631', (mb631-cb631>=0?'+NT$':'-NT$')+Math.abs(Math.round(mb631-cb631)).toLocaleString(), mb631-cb631>=0?'pos':'neg');
-  set('b-ret631', pct((mb631-cb631)/cb631*100), mb631-cb631>=0?'pos':'neg');
+  set('b-formula', '('+fmt(mb631)+' + '+fmt(mb685)+') ×2 ÷ NT$1,115,845 = '+bExpRate.toFixed(1)+'%');
+  set('b-p631','NT$'+p631.toFixed(2)); set('b-p631b','NT$'+p631.toFixed(2)); set('b-mv631',fmt(mb631));
+  set('b-pnl631',(mb631-cb631>=0?'+NT$':'-NT$')+Math.abs(Math.round(mb631-cb631)).toLocaleString(), mb631-cb631>=0?'pos':'neg');
+  set('b-ret631',pct((mb631-cb631)/cb631*100), mb631-cb631>=0?'pos':'neg');
+  set('b-p685','NT$'+p685.toFixed(2)); set('b-p685b','NT$'+p685.toFixed(2)); set('b-mv685',fmt(mb685));
+  set('b-pnl685',(mb685-cb685>=0?'+NT$':'-NT$')+Math.abs(Math.round(mb685-cb685)).toLocaleString(), mb685-cb685>=0?'pos':'neg');
+  set('b-ret685',pct((mb685-cb685)/cb685*100), mb685-cb685>=0?'pos':'neg');
 
   set('c-mv', fmt(cMV));
   set('c-pnl', (cPnl>=0?'+NT$':'-NT$')+Math.abs(Math.round(cPnl)).toLocaleString(), 'metric-value '+(cPnl>=0?'pos':'neg'));
   set('c-ret', pct(cRet), 'metric-value '+(cRet>=0?'pos':'neg'));
   set('c-exp', cExpRate.toFixed(1)+'%');
   document.getElementById('c-bar').style.width = Math.min(cExpRate/2,100)+'%';
-  set('c-formula', '合計 '+cMV.toLocaleString()+' 市值 ×2 ÷ NT$'+principalC.toLocaleString()+' = '+cExpRate.toFixed(1)+'%');
-  set('c-p631', 'NT$'+p631.toFixed(2)); set('c-p631b', 'NT$'+p631.toFixed(2)); set('c-mv631', fmt(c631MV));
-  set('c-pnl631', (c631Pnl>=0?'+NT$':'-NT$')+Math.abs(Math.round(c631Pnl)).toLocaleString(), c631Pnl>=0?'pos':'neg');
-  set('c-ret631', pct(c631Pnl/c631Cost*100), c631Pnl>=0?'pos':'neg');
-  set('c-p685', 'NT$'+p685.toFixed(2)); set('c-p685b', 'NT$'+p685.toFixed(2)); set('c-mv685', fmt(ma685));
-  set('c-pnl685', (ma685-ca685>=0?'+NT$':'-NT$')+Math.abs(Math.round(ma685-ca685)).toLocaleString(), ma685-ca685>=0?'pos':'neg');
-  set('c-ret685', pct((ma685-ca685)/ca685*100), ma685-ca685>=0?'pos':'neg');
+  set('c-formula', '('+fmt(c631MV)+' + '+fmt(c685MV)+') ×2 ÷ NT$'+principalC.toLocaleString()+' = '+cExpRate.toFixed(1)+'%');
+  set('c-p631','NT$'+p631.toFixed(2)); set('c-p631b','NT$'+p631.toFixed(2)); set('c-mv631',fmt(c631MV));
+  set('c-pnl631',(c631Pnl>=0?'+NT$':'-NT$')+Math.abs(Math.round(c631Pnl)).toLocaleString(), c631Pnl>=0?'pos':'neg');
+  set('c-ret631',pct(c631Pnl/c631Cost*100), c631Pnl>=0?'pos':'neg');
+  set('c-p685','NT$'+p685.toFixed(2)); set('c-p685b','NT$'+p685.toFixed(2)); set('c-mv685',fmt(c685MV));
+  set('c-pnl685',(c685Pnl>=0?'+NT$':'-NT$')+Math.abs(Math.round(c685Pnl)).toLocaleString(), c685Pnl>=0?'pos':'neg');
+  set('c-ret685',pct(c685Pnl/c685Cost*100), c685Pnl>=0?'pos':'neg');
 
   document.getElementById('dot').className = 'dot live';
   document.getElementById('status').textContent = '收盤價更新：' + dateStr;

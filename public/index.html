@@ -58,7 +58,9 @@ body { font-family: -apple-system, sans-serif; background: #f5f5f5; color: #111;
 .pn { font-size: 12px; color: #888; }
 .pn span { font-weight: 600; color: #111; }
 .note { background: #f8f8f8; border-radius: 8px; padding: 8px 12px; margin-bottom: 0.75rem; font-size: 12px; color: #888; text-align: center; }
-.reserve-card { background: #fff; border-radius: 12px; border: 1px solid #eee; padding: 1rem 1.25rem; margin-bottom: 0.75rem; }
+.hint-box { margin-top: 10px; border-radius: 8px; padding: 8px 10px; font-size: 12px; line-height: 1.6; }
+.hint-buy { background: #EAF3DE; color: #3B6D11; }
+.hint-sell { background: #FAEEDA; color: #633806; }
 .install-banner { background: #fff; border-radius: 12px; border: 1px solid #eee; padding: 1rem 1.25rem; margin-bottom: 0.75rem; display: flex; align-items: center; gap: 12px; }
 .install-icon { width: 44px; height: 44px; background: #111; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 22px; flex-shrink: 0; }
 .install-text { flex: 1; }
@@ -184,6 +186,14 @@ body { font-family: -apple-system, sans-serif; background: #f5f5f5; color: #111;
     <div class="note">元大信貸 + 將來房貸 合併計算</div>
     <div class="grid2">
       <div class="metric"><div class="metric-label">合計本金</div><div class="metric-value">NT$2,112,845</div></div>
+      <div class="metric"><div class="metric-label">扣還款金後可用資金</div><div class="metric-value pos" id="c-cash">—</div></div>
+    </div>
+    <div class="grid2">
+      <div class="metric">
+        <div class="metric-label">還款備用金 <span style="font-size:10px;color:#bbb;">可還款到 2028/05</span></div>
+        <div class="metric-value warn">NT$277,920</div>
+        <div style="font-size:11px;color:#bbb;margin-top:2px;">18 個月備用</div>
+      </div>
       <div class="metric"><div class="metric-label">合計持股市值</div><div class="metric-value" id="c-mv">—</div></div>
     </div>
     <div class="grid2">
@@ -195,30 +205,15 @@ body { font-family: -apple-system, sans-serif; background: #f5f5f5; color: #111;
         <span style="font-size:14px;color:#666;">合計曝險率</span>
         <span style="font-size:22px;font-weight:600;" id="c-exp">—</span>
       </div>
-      <div class="bar-track"><div class="bar-fill" id="c-bar" style="width:0%"></div><div class="bar-mid"></div></div>
+      <div class="bar-track">
+        <div class="bar-fill" id="c-bar" style="width:0%"></div>
+        <div class="bar-mid"></div>
+        <div style="position:absolute;top:-4px;left:85%;width:2px;height:16px;background:#1D9E75;"></div>
+        <div style="position:absolute;top:-18px;left:82%;font-size:10px;color:#1D9E75;font-weight:600;">170%</div>
+      </div>
       <div class="bar-labels"><span>0%</span><span>100%</span><span>200%</span></div>
-      <div style="font-size:12px;color:#888;margin-top:8px;" id="c-formula">—</div>
+      <div class="hint-box" id="c-hint" style="display:none;"></div>
     </div>
-
-    <div class="reserve-card">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
-        <span style="font-size:14px;font-weight:600;">還款備用金</span>
-        <span style="font-size:13px;color:#888;">到期：2028/05</span>
-      </div>
-      <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid #f0f0f0;">
-        <span style="font-size:14px;color:#666;">備用金金額</span>
-        <span style="font-size:14px;font-weight:600;color:#BA7517;">NT$277,920</span>
-      </div>
-      <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid #f0f0f0;">
-        <span style="font-size:14px;color:#666;">涵蓋月數</span>
-        <span style="font-size:14px;font-weight:600;">18 個月</span>
-      </div>
-      <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;">
-        <span style="font-size:14px;font-weight:600;">扣除後剩餘可用資金</span>
-        <span style="font-size:16px;font-weight:600;" id="c-cash" class="pos">—</span>
-      </div>
-    </div>
-
     <div class="stock-card">
       <div class="stock-top">
         <div><div style="display:flex;align-items:center;gap:8px;"><span style="font-size:16px;font-weight:600;">00631L</span><span class="badge ba">2× 槓桿</span></div><div style="font-size:12px;color:#888;margin-top:2px;">合計 41,000 股（25,000 + 16,000）</div></div>
@@ -300,6 +295,7 @@ const principalA = 997000;
 const principalB = 1115845;
 const principalC = principalA + principalB;
 const reserveFund = 277920;
+const TARGET_EXP = 1.70;
 const a631 = { shares: 25000, cost: 36.29 };
 const a685 = { shares: 6000, cost: 11.64 };
 const b631 = { shares: 16000, cost: 33.87 };
@@ -367,9 +363,12 @@ function renderPrices(p631, p685, dateStr) {
   const c631MV = ma631 + mb631, c631Cost = ca631 + cb631, c631Pnl = c631MV - c631Cost;
   const c685MV = ma685 + mb685, c685Cost = ca685 + cb685, c685Pnl = c685MV - c685Cost;
 
+  const targetTotalMV = TARGET_EXP * principalC / 2;
+  const diff631 = targetTotalMV - cMV;
+  const shares631Diff = Math.round(Math.abs(diff631) / p631 / 1000) * 1000;
+
   set('a-cash', fmt(aCash), aCash >= 0 ? 'metric-value pos' : 'metric-value neg');
-  set('a-invested', fmt(aCost));
-  set('a-mv', fmt(aMV));
+  set('a-invested', fmt(aCost)); set('a-mv', fmt(aMV));
   set('a-pnl', (aPnl>=0?'+NT$':'-NT$')+Math.abs(Math.round(aPnl)).toLocaleString(), 'metric-value '+(aPnl>=0?'pos':'neg'));
   set('a-ret', pct(aRet), 'metric-value '+(aRet>=0?'pos':'neg'));
   set('a-exp', aExpRate.toFixed(1)+'%');
@@ -383,8 +382,7 @@ function renderPrices(p631, p685, dateStr) {
   set('a-ret685',pct((ma685-ca685)/ca685*100), ma685-ca685>=0?'pos':'neg');
 
   set('b-cash', fmt(bCash), bCash >= 0 ? 'metric-value pos' : 'metric-value neg');
-  set('b-invested', fmt(bCost));
-  set('b-mv', fmt(bMV));
+  set('b-invested', fmt(bCost)); set('b-mv', fmt(bMV));
   set('b-pnl', (bPnl>=0?'+NT$':'-NT$')+Math.abs(Math.round(bPnl)).toLocaleString(), 'metric-value '+(bPnl>=0?'pos':'neg'));
   set('b-ret', pct(bRet), 'metric-value '+(bRet>=0?'pos':'neg'));
   set('b-exp', bExpRate.toFixed(1)+'%');
@@ -397,13 +395,23 @@ function renderPrices(p631, p685, dateStr) {
   set('b-pnl685',(mb685-cb685>=0?'+NT$':'-NT$')+Math.abs(Math.round(mb685-cb685)).toLocaleString(), mb685-cb685>=0?'pos':'neg');
   set('b-ret685',pct((mb685-cb685)/cb685*100), mb685-cb685>=0?'pos':'neg');
 
+  set('c-cash', fmt(cCash), cCash >= 0 ? 'metric-value pos' : 'metric-value neg');
   set('c-mv', fmt(cMV));
   set('c-pnl', (cPnl>=0?'+NT$':'-NT$')+Math.abs(Math.round(cPnl)).toLocaleString(), 'metric-value '+(cPnl>=0?'pos':'neg'));
   set('c-ret', pct(cRet), 'metric-value '+(cRet>=0?'pos':'neg'));
   set('c-exp', cExpRate.toFixed(1)+'%');
   document.getElementById('c-bar').style.width = Math.min(cExpRate/2,100)+'%';
-  set('c-formula', '('+fmt(c631MV)+' + '+fmt(c685MV)+') ×2 ÷ NT$'+principalC.toLocaleString()+' = '+cExpRate.toFixed(1)+'%');
-  set('c-cash', fmt(cCash), cCash >= 0 ? 'pos' : 'neg');
+
+  const hint = document.getElementById('c-hint');
+  hint.style.display = 'block';
+  if (diff631 > 0) {
+    hint.className = 'hint-box hint-buy';
+    hint.textContent = '▲ 距170%曝險還差 '+fmt(diff631)+'，建議買入 00631L 約 '+shares631Diff.toLocaleString()+' 股';
+  } else {
+    hint.className = 'hint-box hint-sell';
+    hint.textContent = '▼ 已超過170%曝險，超出 '+fmt(Math.abs(diff631))+'，建議賣出 00631L 約 '+shares631Diff.toLocaleString()+' 股';
+  }
+
   set('c-p631','NT$'+p631.toFixed(2)); set('c-p631b','NT$'+p631.toFixed(2)); set('c-mv631',fmt(c631MV));
   set('c-pnl631',(c631Pnl>=0?'+NT$':'-NT$')+Math.abs(Math.round(c631Pnl)).toLocaleString(), c631Pnl>=0?'pos':'neg');
   set('c-ret631',pct(c631Pnl/c631Cost*100), c631Pnl>=0?'pos':'neg');

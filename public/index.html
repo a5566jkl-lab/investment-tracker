@@ -35,7 +35,6 @@ body { font-family: -apple-system, sans-serif; background: #f5f5f5; color: #111;
 .pos { color: #1D9E75; }
 .neg { color: #D85A30; }
 .warn { color: #BA7517; }
-.muted { color: #bbb; }
 .badge { font-size: 11px; padding: 2px 8px; border-radius: 4px; font-weight: 500; }
 .ba { background: #FAEEDA; color: #854F0B; }
 .stock-card { background: #fff; border-radius: 12px; border: 1px solid #eee; padding: 1rem 1.25rem; margin-bottom: 0.75rem; }
@@ -59,6 +58,7 @@ body { font-family: -apple-system, sans-serif; background: #f5f5f5; color: #111;
 .pn { font-size: 12px; color: #888; }
 .pn span { font-weight: 600; color: #111; }
 .note { background: #f8f8f8; border-radius: 8px; padding: 8px 12px; margin-bottom: 0.75rem; font-size: 12px; color: #888; text-align: center; }
+.reserve-card { background: #fff; border-radius: 12px; border: 1px solid #eee; padding: 1rem 1.25rem; margin-bottom: 0.75rem; }
 .install-banner { background: #fff; border-radius: 12px; border: 1px solid #eee; padding: 1rem 1.25rem; margin-bottom: 0.75rem; display: flex; align-items: center; gap: 12px; }
 .install-icon { width: 44px; height: 44px; background: #111; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 22px; flex-shrink: 0; }
 .install-text { flex: 1; }
@@ -108,11 +108,11 @@ body { font-family: -apple-system, sans-serif; background: #f5f5f5; color: #111;
     </div>
     <div class="stock-card">
       <div class="stock-top">
-        <div><div style="display:flex;align-items:center;gap:8px;"><span style="font-size:16px;font-weight:600;">00631L</span><span class="badge ba">2× 槓桿</span></div><div style="font-size:12px;color:#888;margin-top:2px;">元大台灣50正2・26,000 股</div></div>
+        <div><div style="display:flex;align-items:center;gap:8px;"><span style="font-size:16px;font-weight:600;">00631L</span><span class="badge ba">2× 槓桿</span></div><div style="font-size:12px;color:#888;margin-top:2px;">元大台灣50正2・25,000 股</div></div>
         <div style="text-align:right;"><div style="font-size:11px;color:#888;">收盤價</div><div style="font-size:18px;font-weight:600;" id="a-p631">—</div></div>
       </div>
       <div class="stock-cols">
-        <div class="stock-col"><div class="col-title">持股成本</div><div class="col-row"><span class="cl">均價</span><span class="cv">NT$36.12</span></div><div class="col-row"><span class="cl">總成本</span><span class="cv">NT$939,120</span></div></div>
+        <div class="stock-col"><div class="col-title">持股成本</div><div class="col-row"><span class="cl">均價</span><span class="cv">NT$36.29</span></div><div class="col-row"><span class="cl">總成本</span><span class="cv">NT$907,250</span></div></div>
         <div class="stock-col"><div class="col-title">持股市值</div><div class="col-row"><span class="cl">現價</span><span class="cv" id="a-p631b">—</span></div><div class="col-row"><span class="cl">總市值</span><span class="cv" id="a-mv631">—</span></div></div>
       </div>
       <div class="pnl-row"><span style="font-size:13px;color:#666;">損益</span><div style="text-align:right;"><span style="font-size:16px;font-weight:600;" id="a-pnl631">—</span><span style="font-size:13px;margin-left:6px;" id="a-ret631">—</span></div></div>
@@ -156,11 +156,11 @@ body { font-family: -apple-system, sans-serif; background: #f5f5f5; color: #111;
     </div>
     <div class="stock-card">
       <div class="stock-top">
-        <div><div style="display:flex;align-items:center;gap:8px;"><span style="font-size:16px;font-weight:600;">00631L</span><span class="badge ba">2× 槓桿</span></div><div style="font-size:12px;color:#888;margin-top:2px;">元大台灣50正2・15,000 股</div></div>
+        <div><div style="display:flex;align-items:center;gap:8px;"><span style="font-size:16px;font-weight:600;">00631L</span><span class="badge ba">2× 槓桿</span></div><div style="font-size:12px;color:#888;margin-top:2px;">元大台灣50正2・16,000 股</div></div>
         <div style="text-align:right;"><div style="font-size:11px;color:#888;">收盤價</div><div style="font-size:18px;font-weight:600;" id="b-p631">—</div></div>
       </div>
       <div class="stock-cols">
-        <div class="stock-col"><div class="col-title">持股成本</div><div class="col-row"><span class="cl">均價</span><span class="cv">NT$33.70</span></div><div class="col-row"><span class="cl">總成本</span><span class="cv">NT$505,500</span></div></div>
+        <div class="stock-col"><div class="col-title">持股成本</div><div class="col-row"><span class="cl">均價</span><span class="cv">NT$33.87</span></div><div class="col-row"><span class="cl">總成本</span><span class="cv">NT$541,920</span></div></div>
         <div class="stock-col"><div class="col-title">持股市值</div><div class="col-row"><span class="cl">現價</span><span class="cv" id="b-p631b">—</span></div><div class="col-row"><span class="cl">總市值</span><span class="cv" id="b-mv631">—</span></div></div>
       </div>
       <div class="pnl-row"><span style="font-size:13px;color:#666;">損益</span><div style="text-align:right;"><span style="font-size:16px;font-weight:600;" id="b-pnl631">—</span><span style="font-size:13px;margin-left:6px;" id="b-ret631">—</span></div></div>
@@ -199,13 +199,33 @@ body { font-family: -apple-system, sans-serif; background: #f5f5f5; color: #111;
       <div class="bar-labels"><span>0%</span><span>100%</span><span>200%</span></div>
       <div style="font-size:12px;color:#888;margin-top:8px;" id="c-formula">—</div>
     </div>
+
+    <div class="reserve-card">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+        <span style="font-size:14px;font-weight:600;">還款備用金</span>
+        <span style="font-size:13px;color:#888;">到期：2028/05</span>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid #f0f0f0;">
+        <span style="font-size:14px;color:#666;">備用金金額</span>
+        <span style="font-size:14px;font-weight:600;color:#BA7517;">NT$277,920</span>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid #f0f0f0;">
+        <span style="font-size:14px;color:#666;">涵蓋月數</span>
+        <span style="font-size:14px;font-weight:600;">18 個月</span>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;">
+        <span style="font-size:14px;font-weight:600;">扣除後剩餘可用資金</span>
+        <span style="font-size:16px;font-weight:600;" id="c-cash" class="pos">—</span>
+      </div>
+    </div>
+
     <div class="stock-card">
       <div class="stock-top">
-        <div><div style="display:flex;align-items:center;gap:8px;"><span style="font-size:16px;font-weight:600;">00631L</span><span class="badge ba">2× 槓桿</span></div><div style="font-size:12px;color:#888;margin-top:2px;">合計 41,000 股（26,000 + 15,000）</div></div>
+        <div><div style="display:flex;align-items:center;gap:8px;"><span style="font-size:16px;font-weight:600;">00631L</span><span class="badge ba">2× 槓桿</span></div><div style="font-size:12px;color:#888;margin-top:2px;">合計 41,000 股（25,000 + 16,000）</div></div>
         <div style="text-align:right;"><div style="font-size:11px;color:#888;">收盤價</div><div style="font-size:18px;font-weight:600;" id="c-p631">—</div></div>
       </div>
       <div class="stock-cols">
-        <div class="stock-col"><div class="col-title">持股成本</div><div class="col-row"><span class="cl">加權均價</span><span class="cv">NT$35.27</span></div><div class="col-row"><span class="cl">總成本</span><span class="cv">NT$1,444,620</span></div></div>
+        <div class="stock-col"><div class="col-title">持股成本</div><div class="col-row"><span class="cl">加權均價</span><span class="cv">NT$35.30</span></div><div class="col-row"><span class="cl">總成本</span><span class="cv">NT$1,449,170</span></div></div>
         <div class="stock-col"><div class="col-title">持股市值</div><div class="col-row"><span class="cl">現價</span><span class="cv" id="c-p631b">—</span></div><div class="col-row"><span class="cl">總市值</span><span class="cv" id="c-mv631">—</span></div></div>
       </div>
       <div class="pnl-row"><span style="font-size:13px;color:#666;">損益</span><div style="text-align:right;"><span style="font-size:16px;font-weight:600;" id="c-pnl631">—</span><span style="font-size:13px;margin-left:6px;" id="c-ret631">—</span></div></div>
@@ -279,9 +299,10 @@ const API_URL = 'https://investment-tracker-one-ashy.vercel.app/api/prices';
 const principalA = 997000;
 const principalB = 1115845;
 const principalC = principalA + principalB;
-const a631 = { shares: 26000, cost: 36.12 };
+const reserveFund = 277920;
+const a631 = { shares: 25000, cost: 36.29 };
 const a685 = { shares: 6000, cost: 11.64 };
-const b631 = { shares: 15000, cost: 33.70 };
+const b631 = { shares: 16000, cost: 33.87 };
 const b685 = { shares: 4000, cost: 9.94 };
 const annualRate = 0.028, monthlyPayment = 13123, loanBalance = 967613, paidPeriods = 3, totalPeriods = 84;
 
@@ -341,6 +362,8 @@ function renderPrices(p631, p685, dateStr) {
   const cCost = aCost + bCost, cMV = aMV + bMV;
   const cPnl = cMV - cCost, cRet = cPnl / cCost * 100;
   const cExpRate = (cMV * 2) / principalC * 100;
+  const cCash = principalC - cCost - reserveFund;
+
   const c631MV = ma631 + mb631, c631Cost = ca631 + cb631, c631Pnl = c631MV - c631Cost;
   const c685MV = ma685 + mb685, c685Cost = ca685 + cb685, c685Pnl = c685MV - c685Cost;
 
@@ -380,6 +403,7 @@ function renderPrices(p631, p685, dateStr) {
   set('c-exp', cExpRate.toFixed(1)+'%');
   document.getElementById('c-bar').style.width = Math.min(cExpRate/2,100)+'%';
   set('c-formula', '('+fmt(c631MV)+' + '+fmt(c685MV)+') ×2 ÷ NT$'+principalC.toLocaleString()+' = '+cExpRate.toFixed(1)+'%');
+  set('c-cash', fmt(cCash), cCash >= 0 ? 'pos' : 'neg');
   set('c-p631','NT$'+p631.toFixed(2)); set('c-p631b','NT$'+p631.toFixed(2)); set('c-mv631',fmt(c631MV));
   set('c-pnl631',(c631Pnl>=0?'+NT$':'-NT$')+Math.abs(Math.round(c631Pnl)).toLocaleString(), c631Pnl>=0?'pos':'neg');
   set('c-ret631',pct(c631Pnl/c631Cost*100), c631Pnl>=0?'pos':'neg');

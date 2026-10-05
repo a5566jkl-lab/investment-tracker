@@ -27,7 +27,7 @@ body { font-family: -apple-system, sans-serif; background: #f5f5f5; color: #111;
 .metric-label { font-size: 11px; color: #888; margin-bottom: 4px; }
 .metric-value { font-size: 15px; font-weight: 600; }
 .card { background: #fff; border-radius: 12px; border: 1px solid #eee; padding: 1rem 1.25rem; margin-bottom: 0.75rem; }
-.card-title { font-size: 13px; color: #888; margin-bottom: 10px; }
+.card-title { font-size: 13px; color: #888; margin-bottom: 10px; font-weight: 600; }
 .row { display: flex; justify-content: space-between; align-items: center; padding: 7px 0; border-bottom: 1px solid #f0f0f0; }
 .row:last-child { border-bottom: none; }
 .rl { font-size: 14px; color: #666; }
@@ -61,6 +61,7 @@ body { font-family: -apple-system, sans-serif; background: #f5f5f5; color: #111;
 .hint-box { margin-top: 10px; border-radius: 8px; padding: 8px 10px; font-size: 12px; line-height: 1.6; }
 .hint-buy { background: #EAF3DE; color: #3B6D11; }
 .hint-sell { background: #FAEEDA; color: #633806; }
+.loan-section-title { font-size: 14px; font-weight: 600; color: #111; margin: 1rem 0 0.5rem; padding-bottom: 6px; border-bottom: 2px solid #111; }
 .install-banner { background: #fff; border-radius: 12px; border: 1px solid #eee; padding: 1rem 1.25rem; margin-bottom: 0.75rem; display: flex; align-items: center; gap: 12px; }
 .install-icon { width: 44px; height: 44px; background: #111; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 22px; flex-shrink: 0; }
 .install-text { flex: 1; }
@@ -78,14 +79,72 @@ body { font-family: -apple-system, sans-serif; background: #f5f5f5; color: #111;
     <span id="status">載入中...</span>
   </div>
   <div class="tabs">
-    <div class="tab active" onclick="showTab('a')">元大信貸資金</div>
+    <div class="tab active" onclick="showTab('c')">借貸資金整合</div>
+    <div class="tab" onclick="showTab('a')">元大信貸資金</div>
     <div class="tab" onclick="showTab('b')">將來房貸資金</div>
-    <div class="tab" onclick="showTab('c')">借貸資金整合</div>
     <div class="tab" onclick="showTab('loan')">信貸</div>
   </div>
 </div>
 
-<div id="tab-a">
+<div id="tab-c">
+  <div class="section" style="margin-top:1rem;">
+    <div class="note">元大信貸 + 將來房貸 合併計算</div>
+    <div class="grid2">
+      <div class="metric"><div class="metric-label">合計本金</div><div class="metric-value">NT$2,112,845</div></div>
+      <div class="metric"><div class="metric-label">扣還款金後可用資金</div><div class="metric-value pos" id="c-cash">—</div></div>
+    </div>
+    <div class="grid2">
+      <div class="metric">
+        <div class="metric-label">還款備用金 <span style="font-size:10px;color:#bbb;">可還款到 2028/05</span></div>
+        <div class="metric-value warn">NT$277,920</div>
+        <div style="font-size:11px;color:#bbb;margin-top:2px;">18 個月備用</div>
+      </div>
+      <div class="metric"><div class="metric-label">合計持股市值</div><div class="metric-value" id="c-mv">—</div></div>
+    </div>
+    <div class="grid2">
+      <div class="metric"><div class="metric-label">合計損益</div><div class="metric-value" id="c-pnl">—</div></div>
+      <div class="metric"><div class="metric-label">合計報酬率</div><div class="metric-value" id="c-ret">—</div></div>
+    </div>
+    <div class="bar-wrap">
+      <div style="display:flex;justify-content:space-between;align-items:center;">
+        <span style="font-size:14px;color:#666;">合計曝險率</span>
+        <span style="font-size:22px;font-weight:600;" id="c-exp">—</span>
+      </div>
+      <div class="bar-track">
+        <div class="bar-fill" id="c-bar" style="width:0%"></div>
+        <div class="bar-mid"></div>
+        <div style="position:absolute;top:-4px;left:85%;width:2px;height:16px;background:#1D9E75;"></div>
+        <div style="position:absolute;top:-18px;left:82%;font-size:10px;color:#1D9E75;font-weight:600;">170%</div>
+      </div>
+      <div class="bar-labels"><span>0%</span><span>100%</span><span>200%</span></div>
+      <div class="hint-box" id="c-hint" style="display:none;"></div>
+    </div>
+    <div class="stock-card">
+      <div class="stock-top">
+        <div><div style="display:flex;align-items:center;gap:8px;"><span style="font-size:16px;font-weight:600;">00631L</span><span class="badge ba">2× 槓桿</span></div><div style="font-size:12px;color:#888;margin-top:2px;">合計 41,000 股（25,000 + 16,000）</div></div>
+        <div style="text-align:right;"><div style="font-size:11px;color:#888;">收盤價</div><div style="font-size:18px;font-weight:600;" id="c-p631">—</div></div>
+      </div>
+      <div class="stock-cols">
+        <div class="stock-col"><div class="col-title">持股成本</div><div class="col-row"><span class="cl">加權均價</span><span class="cv">NT$35.30</span></div><div class="col-row"><span class="cl">總成本</span><span class="cv">NT$1,449,170</span></div></div>
+        <div class="stock-col"><div class="col-title">持股市值</div><div class="col-row"><span class="cl">現價</span><span class="cv" id="c-p631b">—</span></div><div class="col-row"><span class="cl">總市值</span><span class="cv" id="c-mv631">—</span></div></div>
+      </div>
+      <div class="pnl-row"><span style="font-size:13px;color:#666;">損益</span><div style="text-align:right;"><span style="font-size:16px;font-weight:600;" id="c-pnl631">—</span><span style="font-size:13px;margin-left:6px;" id="c-ret631">—</span></div></div>
+    </div>
+    <div class="stock-card">
+      <div class="stock-top">
+        <div><div style="display:flex;align-items:center;gap:8px;"><span style="font-size:16px;font-weight:600;">00685L</span><span class="badge ba">2× 槓桿</span></div><div style="font-size:12px;color:#888;margin-top:2px;">合計 10,000 股（6,000 + 4,000）</div></div>
+        <div style="text-align:right;"><div style="font-size:11px;color:#888;">收盤價</div><div style="font-size:18px;font-weight:600;" id="c-p685">—</div></div>
+      </div>
+      <div class="stock-cols">
+        <div class="stock-col"><div class="col-title">持股成本</div><div class="col-row"><span class="cl">加權均價</span><span class="cv">NT$10.96</span></div><div class="col-row"><span class="cl">總成本</span><span class="cv">NT$109,600</span></div></div>
+        <div class="stock-col"><div class="col-title">持股市值</div><div class="col-row"><span class="cl">現價</span><span class="cv" id="c-p685b">—</span></div><div class="col-row"><span class="cl">總市值</span><span class="cv" id="c-mv685">—</span></div></div>
+      </div>
+      <div class="pnl-row"><span style="font-size:13px;color:#666;">損益</span><div style="text-align:right;"><span style="font-size:16px;font-weight:600;" id="c-pnl685">—</span><span style="font-size:13px;margin-left:6px;" id="c-ret685">—</span></div></div>
+    </div>
+  </div>
+</div>
+
+<div id="tab-a" style="display:none;">
   <div class="section" style="margin-top:1rem;">
     <div class="grid2">
       <div class="metric"><div class="metric-label">可投入本金</div><div class="metric-value">NT$997,000</div></div>
@@ -181,99 +240,81 @@ body { font-family: -apple-system, sans-serif; background: #f5f5f5; color: #111;
   </div>
 </div>
 
-<div id="tab-c" style="display:none;">
-  <div class="section" style="margin-top:1rem;">
-    <div class="note">元大信貸 + 將來房貸 合併計算</div>
-    <div class="grid2">
-      <div class="metric"><div class="metric-label">合計本金</div><div class="metric-value">NT$2,112,845</div></div>
-      <div class="metric"><div class="metric-label">扣還款金後可用資金</div><div class="metric-value pos" id="c-cash">—</div></div>
-    </div>
-    <div class="grid2">
-      <div class="metric">
-        <div class="metric-label">還款備用金 <span style="font-size:10px;color:#bbb;">可還款到 2028/05</span></div>
-        <div class="metric-value warn">NT$277,920</div>
-        <div style="font-size:11px;color:#bbb;margin-top:2px;">18 個月備用</div>
-      </div>
-      <div class="metric"><div class="metric-label">合計持股市值</div><div class="metric-value" id="c-mv">—</div></div>
-    </div>
-    <div class="grid2">
-      <div class="metric"><div class="metric-label">合計損益</div><div class="metric-value" id="c-pnl">—</div></div>
-      <div class="metric"><div class="metric-label">合計報酬率</div><div class="metric-value" id="c-ret">—</div></div>
-    </div>
-    <div class="bar-wrap">
-      <div style="display:flex;justify-content:space-between;align-items:center;">
-        <span style="font-size:14px;color:#666;">合計曝險率</span>
-        <span style="font-size:22px;font-weight:600;" id="c-exp">—</span>
-      </div>
-      <div class="bar-track">
-        <div class="bar-fill" id="c-bar" style="width:0%"></div>
-        <div class="bar-mid"></div>
-        <div style="position:absolute;top:-4px;left:85%;width:2px;height:16px;background:#1D9E75;"></div>
-        <div style="position:absolute;top:-18px;left:82%;font-size:10px;color:#1D9E75;font-weight:600;">170%</div>
-      </div>
-      <div class="bar-labels"><span>0%</span><span>100%</span><span>200%</span></div>
-      <div class="hint-box" id="c-hint" style="display:none;"></div>
-    </div>
-    <div class="stock-card">
-      <div class="stock-top">
-        <div><div style="display:flex;align-items:center;gap:8px;"><span style="font-size:16px;font-weight:600;">00631L</span><span class="badge ba">2× 槓桿</span></div><div style="font-size:12px;color:#888;margin-top:2px;">合計 41,000 股（25,000 + 16,000）</div></div>
-        <div style="text-align:right;"><div style="font-size:11px;color:#888;">收盤價</div><div style="font-size:18px;font-weight:600;" id="c-p631">—</div></div>
-      </div>
-      <div class="stock-cols">
-        <div class="stock-col"><div class="col-title">持股成本</div><div class="col-row"><span class="cl">加權均價</span><span class="cv">NT$35.30</span></div><div class="col-row"><span class="cl">總成本</span><span class="cv">NT$1,449,170</span></div></div>
-        <div class="stock-col"><div class="col-title">持股市值</div><div class="col-row"><span class="cl">現價</span><span class="cv" id="c-p631b">—</span></div><div class="col-row"><span class="cl">總市值</span><span class="cv" id="c-mv631">—</span></div></div>
-      </div>
-      <div class="pnl-row"><span style="font-size:13px;color:#666;">損益</span><div style="text-align:right;"><span style="font-size:16px;font-weight:600;" id="c-pnl631">—</span><span style="font-size:13px;margin-left:6px;" id="c-ret631">—</span></div></div>
-    </div>
-    <div class="stock-card">
-      <div class="stock-top">
-        <div><div style="display:flex;align-items:center;gap:8px;"><span style="font-size:16px;font-weight:600;">00685L</span><span class="badge ba">2× 槓桿</span></div><div style="font-size:12px;color:#888;margin-top:2px;">合計 10,000 股（6,000 + 4,000）</div></div>
-        <div style="text-align:right;"><div style="font-size:11px;color:#888;">收盤價</div><div style="font-size:18px;font-weight:600;" id="c-p685">—</div></div>
-      </div>
-      <div class="stock-cols">
-        <div class="stock-col"><div class="col-title">持股成本</div><div class="col-row"><span class="cl">加權均價</span><span class="cv">NT$10.96</span></div><div class="col-row"><span class="cl">總成本</span><span class="cv">NT$109,600</span></div></div>
-        <div class="stock-col"><div class="col-title">持股市值</div><div class="col-row"><span class="cl">現價</span><span class="cv" id="c-p685b">—</span></div><div class="col-row"><span class="cl">總市值</span><span class="cv" id="c-mv685">—</span></div></div>
-      </div>
-      <div class="pnl-row"><span style="font-size:13px;color:#666;">損益</span><div style="text-align:right;"><span style="font-size:16px;font-weight:600;" id="c-pnl685">—</span><span style="font-size:13px;margin-left:6px;" id="c-ret685">—</span></div></div>
-    </div>
-  </div>
-</div>
-
 <div id="tab-loan" style="display:none;">
   <div class="section" style="margin-top:1rem;">
+
+    <div class="loan-section-title">元大信貸</div>
     <div class="bar-wrap">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
-        <span style="font-size:14px;font-weight:600;">還款進度</span>
-        <span style="font-size:20px;font-weight:600;" id="l-progress-pct">—</span>
+        <span style="font-size:14px;font-weight:600;">還款進度（元大信貸）</span>
+        <span style="font-size:20px;font-weight:600;" id="l1-pct">—</span>
       </div>
-      <div style="font-size:12px;color:#888;margin-bottom:10px;" id="l-progress-sub">—</div>
-      <div class="bar-track"><div class="bar-fill-green" id="l-progress-bar" style="width:0%"></div></div>
+      <div style="font-size:12px;color:#888;margin-bottom:10px;" id="l1-sub">—</div>
+      <div class="bar-track"><div class="bar-fill-green" id="l1-bar" style="width:0%"></div></div>
       <div class="progress-nums">
-        <div class="pn">已還 <span id="l-paid-periods">—</span> 期</div>
-        <div class="pn">剩餘 <span id="l-remain-periods">—</span> 期</div>
+        <div class="pn">已還 <span id="l1-paid">—</span> 期</div>
+        <div class="pn">剩餘 <span id="l1-remain">—</span> 期</div>
         <div class="pn">共 <span>84 期</span></div>
       </div>
     </div>
     <div class="card">
-      <div class="card-title">信貸基本資料</div>
+      <div class="card-title">元大信貸基本資料</div>
       <div class="row"><span class="rl">貸款本金</span><span class="rv">NT$997,000</span></div>
       <div class="row"><span class="rl">年利率</span><span class="rv">2.8%</span></div>
       <div class="row"><span class="rl">還款期數</span><span class="rv">84 期（7年）</span></div>
-      <div class="row"><span class="rl">已繳期數</span><span class="rv">3 期</span></div>
-      <div class="row"><span class="rl">貸款餘額</span><span class="rv warn">NT$967,613</span></div>
+      <div class="row"><span class="rl">每月還款日</span><span class="rv">16 號</span></div>
+      <div class="row"><span class="rl">已繳期數</span><span class="rv" id="l1-paid2">—</span></div>
+      <div class="row"><span class="rl">貸款餘額</span><span class="rv warn" id="l1-balance">—</span></div>
     </div>
     <div class="card">
       <div class="card-title">每月還款明細</div>
       <div class="row"><span class="rl">每月還款總額</span><span class="rv">NT$13,123</span></div>
-      <div class="row"><span class="rl">↳ 還本金</span><span class="rv pos" id="l-prin">—</span></div>
-      <div class="row"><span class="rl">↳ 付利息</span><span class="rv neg" id="l-int">—</span></div>
+      <div class="row"><span class="rl">↳ 還本金</span><span class="rv pos" id="l1-prin">—</span></div>
+      <div class="row"><span class="rl">↳ 付利息</span><span class="rv neg" id="l1-int">—</span></div>
     </div>
     <div class="card">
-      <div class="card-title">已繳 3 期累計</div>
-      <div class="row"><span class="rl">已還本金</span><span class="rv pos" id="l-paid-prin">—</span></div>
-      <div class="row"><span class="rl">已付利息</span><span class="rv neg" id="l-paid-int">—</span></div>
-      <div class="row"><span class="rl">已繳總金額</span><span class="rv">NT$39,369</span></div>
+      <div class="card-title" id="l1-accum-title">已繳累計</div>
+      <div class="row"><span class="rl">已還本金</span><span class="rv pos" id="l1-paid-prin">—</span></div>
+      <div class="row"><span class="rl">已付利息</span><span class="rv neg" id="l1-paid-int">—</span></div>
+      <div class="row"><span class="rl">已繳總金額</span><span class="rv" id="l1-total">—</span></div>
     </div>
+
+    <div class="loan-section-title" style="margin-top:1.5rem;">將來轉增貸</div>
+    <div class="bar-wrap">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
+        <span style="font-size:14px;font-weight:600;">還款進度（將來轉增貸）</span>
+        <span style="font-size:20px;font-weight:600;" id="l2-pct">—</span>
+      </div>
+      <div style="font-size:12px;color:#888;margin-bottom:10px;" id="l2-sub">—</div>
+      <div class="bar-track"><div class="bar-fill-green" id="l2-bar" style="width:0%"></div></div>
+      <div class="progress-nums">
+        <div class="pn">已還 <span id="l2-paid">—</span> 期</div>
+        <div class="pn">剩餘 <span id="l2-remain">—</span> 期</div>
+        <div class="pn">共 <span>360 期</span></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">將來轉增貸基本資料</div>
+      <div class="row"><span class="rl">貸款本金</span><span class="rv">NT$1,160,000</span></div>
+      <div class="row"><span class="rl">年利率</span><span class="rv">2.43%</span></div>
+      <div class="row"><span class="rl">還款期數</span><span class="rv">360 期（30年）</span></div>
+      <div class="row"><span class="rl">每月還款日</span><span class="rv">9 號</span></div>
+      <div class="row"><span class="rl">已繳期數</span><span class="rv" id="l2-paid2">—</span></div>
+      <div class="row"><span class="rl">貸款餘額</span><span class="rv warn" id="l2-balance">—</span></div>
+    </div>
+    <div class="card">
+      <div class="card-title">每月還款明細</div>
+      <div class="row"><span class="rl">每月還款總額</span><span class="rv">NT$2,317</span></div>
+      <div class="row"><span class="rl">↳ 還本金</span><span class="rv pos" id="l2-prin">—</span></div>
+      <div class="row"><span class="rl">↳ 付利息</span><span class="rv neg" id="l2-int">—</span></div>
+    </div>
+    <div class="card">
+      <div class="card-title" id="l2-accum-title">已繳累計</div>
+      <div class="row"><span class="rl">已還本金</span><span class="rv pos" id="l2-paid-prin">—</span></div>
+      <div class="row"><span class="rl">已付利息</span><span class="rv neg" id="l2-paid-int">—</span></div>
+      <div class="row"><span class="rl">已繳總金額</span><span class="rv" id="l2-total">—</span></div>
+    </div>
+
     <div class="install-banner" id="install-banner" style="display:none;">
       <div class="install-icon">📈</div>
       <div class="install-text"><div class="install-title">加入主畫面</div><div class="install-sub">像 App 一樣快速開啟</div></div>
@@ -300,7 +341,15 @@ const a631 = { shares: 25000, cost: 36.29 };
 const a685 = { shares: 6000, cost: 11.64 };
 const b631 = { shares: 16000, cost: 33.87 };
 const b685 = { shares: 4000, cost: 9.94 };
-const annualRate = 0.028, monthlyPayment = 13123, loanBalance = 967613, paidPeriods = 3, totalPeriods = 84;
+
+const L1 = {
+  principal: 997000, rate: 0.028, periods: 84,
+  payment: 13123, startYear: 2026, startMonth: 4, payDay: 16
+};
+const L2 = {
+  principal: 1160000, rate: 0.0243, periods: 360,
+  payment: 2317, startYear: 2026, startMonth: 8, payDay: 9
+};
 
 function fmt(n) { return 'NT$' + Math.round(n).toLocaleString(); }
 function pct(n) { return (n >= 0 ? '+' : '') + n.toFixed(2) + '%'; }
@@ -311,32 +360,70 @@ function set(id, val, cls) {
   if (cls) el.className = cls;
 }
 
-function calcLoan() {
-  const r = annualRate / 12;
-  let bal = principalA, tp = 0, ti = 0;
+function calcPaidPeriods(startYear, startMonth, payDay) {
+  const now = new Date();
+  const twNow = new Date(now.getTime() + 8 * 60 * 60 * 1000);
+  const y = twNow.getUTCFullYear(), m = twNow.getUTCMonth() + 1, d = twNow.getUTCDate();
+  let paid = 0;
+  let sy = startYear, sm = startMonth;
+  while (true) {
+    if (sy > y) break;
+    if (sy === y && sm > m) break;
+    if (sy === y && sm === m && d < payDay) break;
+    paid++;
+    sm++;
+    if (sm > 12) { sm = 1; sy++; }
+  }
+  return paid;
+}
+
+function calcLoan(loan, paidPeriods) {
+  const r = loan.rate / 12;
+  let bal = loan.principal, tp = 0, ti = 0;
   for (let i = 1; i <= paidPeriods; i++) {
-    const ip = bal * r, pp = monthlyPayment - ip;
+    const ip = bal * r, pp = loan.payment - ip;
     tp += pp; ti += ip; bal -= pp;
   }
-  const ci = loanBalance * r;
-  return { curPrin: monthlyPayment - ci, curInt: ci, totalPrin: tp, totalInt: ti };
+  const curInt = bal * r;
+  const curPrin = loan.payment - curInt;
+  return { balance: bal, totalPrin: tp, totalInt: ti, curPrin, curInt };
 }
 
 function renderLoan() {
-  const l = calcLoan();
-  const progressPct = (paidPeriods / totalPeriods * 100).toFixed(1);
-  const remainPeriods = totalPeriods - paidPeriods;
-  const remainYears = Math.floor(remainPeriods / 12);
-  const remainMonths = remainPeriods % 12;
-  document.getElementById('l-progress-pct').textContent = progressPct + '%';
-  document.getElementById('l-progress-sub').textContent = '已還 NT$' + Math.round(principalA - loanBalance).toLocaleString() + '，剩餘 NT$' + loanBalance.toLocaleString() + '，約 ' + remainYears + ' 年 ' + remainMonths + ' 個月';
-  document.getElementById('l-progress-bar').style.width = progressPct + '%';
-  document.getElementById('l-paid-periods').textContent = paidPeriods;
-  document.getElementById('l-remain-periods').textContent = remainPeriods;
-  document.getElementById('l-prin').textContent = fmt(l.curPrin);
-  document.getElementById('l-int').textContent = fmt(l.curInt);
-  document.getElementById('l-paid-prin').textContent = fmt(l.totalPrin);
-  document.getElementById('l-paid-int').textContent = fmt(l.totalInt);
+  const p1 = calcPaidPeriods(L1.startYear, L1.startMonth, L1.payDay);
+  const p2 = calcPaidPeriods(L2.startYear, L2.startMonth, L2.payDay);
+  const l1 = calcLoan(L1, p1);
+  const l2 = calcLoan(L2, p2);
+
+  const r1 = L1.periods - p1;
+  const ry1 = Math.floor(r1 / 12), rm1 = r1 % 12;
+  set('l1-pct', (p1 / L1.periods * 100).toFixed(1) + '%');
+  set('l1-sub', '已還 NT$' + Math.round(L1.principal - l1.balance).toLocaleString() + '，剩餘 NT$' + Math.round(l1.balance).toLocaleString() + '，約 ' + ry1 + ' 年 ' + rm1 + ' 個月');
+  document.getElementById('l1-bar').style.width = (p1 / L1.periods * 100) + '%';
+  set('l1-paid', p1); set('l1-remain', r1);
+  set('l1-paid2', p1 + ' 期');
+  set('l1-balance', fmt(Math.round(l1.balance)));
+  set('l1-prin', fmt(Math.round(l1.curPrin)));
+  set('l1-int', fmt(Math.round(l1.curInt)));
+  set('l1-paid-prin', fmt(Math.round(l1.totalPrin)));
+  set('l1-paid-int', fmt(Math.round(l1.totalInt)));
+  set('l1-total', fmt(Math.round(p1 * L1.payment)));
+  set('l1-accum-title', '已繳 ' + p1 + ' 期累計');
+
+  const r2 = L2.periods - p2;
+  const ry2 = Math.floor(r2 / 12), rm2 = r2 % 12;
+  set('l2-pct', (p2 / L2.periods * 100).toFixed(1) + '%');
+  set('l2-sub', '已還 NT$' + Math.round(L2.principal - l2.balance).toLocaleString() + '，剩餘 NT$' + Math.round(l2.balance).toLocaleString() + '，約 ' + ry2 + ' 年 ' + rm2 + ' 個月');
+  document.getElementById('l2-bar').style.width = (p2 / L2.periods * 100) + '%';
+  set('l2-paid', p2); set('l2-remain', r2);
+  set('l2-paid2', p2 + ' 期');
+  set('l2-balance', fmt(Math.round(l2.balance)));
+  set('l2-prin', fmt(Math.round(l2.curPrin)));
+  set('l2-int', fmt(Math.round(l2.curInt)));
+  set('l2-paid-prin', fmt(Math.round(l2.totalPrin)));
+  set('l2-paid-int', fmt(Math.round(l2.totalInt)));
+  set('l2-total', fmt(Math.round(p2 * L2.payment)));
+  set('l2-accum-title', '已繳 ' + p2 + ' 期累計');
 }
 
 function renderPrices(p631, p685, dateStr) {
@@ -453,11 +540,11 @@ document.getElementById('install-btn').addEventListener('click', async () => {
 });
 
 function showTab(name) {
-  ['a','b','c','loan'].forEach(t => {
+  ['c','a','b','loan'].forEach(t => {
     document.getElementById('tab-' + t).style.display = t === name ? 'block' : 'none';
   });
   document.querySelectorAll('.tab').forEach((el, i) => {
-    el.classList.toggle('active', ['a','b','c','loan'][i] === name);
+    el.classList.toggle('active', ['c','a','b','loan'][i] === name);
   });
 }
 

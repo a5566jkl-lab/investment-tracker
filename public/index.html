@@ -50,7 +50,7 @@ body { font-family: -apple-system, sans-serif; background: #f5f5f5; color: #111;
 .cv { font-size: 12px; font-weight: 500; }
 .pnl-row { border-top: 1px solid #f0f0f0; margin-top: 8px; padding-top: 8px; display: flex; justify-content: space-between; align-items: center; }
 .bar-wrap { margin-bottom: 0.75rem; background: #fff; border-radius: 12px; border: 1px solid #eee; padding: 1rem 1.25rem; }
-.bar-track { height: 8px; background: #f0f0f0; border-radius: 4px; position: relative; margin: 10px 0 4px; }
+.bar-track { height: 8px; background: #f0f0f0; border-radius: 4px; position: relative; margin: 20px 0 4px; }
 .bar-fill { height: 100%; border-radius: 4px; background: #EF9F27; transition: width 0.4s; }
 .bar-fill-green { height: 100%; border-radius: 4px; background: #1D9E75; transition: width 0.4s; }
 .bar-mid { position: absolute; top: -4px; left: 50%; width: 2px; height: 16px; background: #ccc; }
@@ -59,10 +59,23 @@ body { font-family: -apple-system, sans-serif; background: #f5f5f5; color: #111;
 .pn { font-size: 12px; color: #888; }
 .pn span { font-weight: 600; color: #111; }
 .note { background: #f8f8f8; border-radius: 8px; padding: 8px 12px; margin-bottom: 0.75rem; font-size: 12px; color: #888; text-align: center; }
-.hint-box { margin-top: 10px; border-radius: 8px; padding: 8px 10px; font-size: 12px; line-height: 1.6; }
+.hint-box { margin-top: 10px; border-radius: 8px; padding: 10px 12px; font-size: 12px; line-height: 1.8; }
 .hint-buy { background: #EAF3DE; color: #3B6D11; }
 .hint-sell { background: #FAEEDA; color: #633806; }
+.hint-ok { background: #f0f0f0; color: #555; }
+.rebalance-card { background: #fff; border-radius: 12px; border: 1px solid #eee; padding: 1rem 1.25rem; margin-bottom: 0.75rem; }
+.rebalance-title { font-size: 13px; font-weight: 600; color: #111; margin-bottom: 10px; }
+.rebalance-row { display: flex; justify-content: space-between; padding: 5px 0; border-bottom: 1px solid #f8f8f8; font-size: 13px; }
+.rebalance-row:last-child { border-bottom: none; }
+.rebalance-label { color: #666; }
+.rebalance-val { font-weight: 500; }
+.scenario-block { background: #f8f8f8; border-radius: 8px; padding: 10px; margin-top: 8px; font-size: 12px; line-height: 1.8; color: #444; }
+.scenario-title { font-size: 12px; font-weight: 600; color: #111; margin-bottom: 4px; }
 .loan-section-title { font-size: 14px; font-weight: 600; color: #111; margin: 1rem 0 0.5rem; padding-bottom: 6px; border-bottom: 2px solid #111; }
+.cash-input-row { display: flex; align-items: center; gap: 8px; margin-bottom: 1rem; background: #fff; border-radius: 10px; border: 1px solid #eee; padding: 0.75rem 1rem; }
+.cash-input-label { font-size: 12px; color: #888; flex-shrink: 0; }
+.cash-input { flex: 1; border: none; border-bottom: 1px solid #ddd; font-size: 15px; font-weight: 600; padding: 2px 4px; outline: none; background: transparent; text-align: right; }
+.cash-input-btn { background: #111; color: #fff; border: none; border-radius: 6px; padding: 5px 12px; font-size: 12px; cursor: pointer; flex-shrink: 0; }
 .install-banner { background: #fff; border-radius: 12px; border: 1px solid #eee; padding: 1rem 1.25rem; margin-bottom: 0.75rem; display: flex; align-items: center; gap: 12px; }
 .install-icon { width: 44px; height: 44px; background: #111; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 22px; flex-shrink: 0; }
 .install-text { flex: 1; }
@@ -91,35 +104,37 @@ body { font-family: -apple-system, sans-serif; background: #f5f5f5; color: #111;
   <div class="section" style="margin-top:1rem;">
     <div class="note">元大信貸 + 將來房貸 合併計算</div>
 
-    <div class="grid2">
-      <div class="metric"><div class="metric-label">合計本金</div><div class="metric-value">NT$2,112,845</div></div>
-      <div class="metric"><div class="metric-label">合計已投入資金</div><div class="metric-value" id="c-invested">—</div></div>
-    </div>
-    <div class="grid2">
-      <div class="metric">
-        <div class="metric-label">還款備用金 <span style="font-size:10px;color:#bbb;">可還款到 2027/05</span></div>
-        <div class="metric-value warn" id="c-reserve">—</div>
-        <div class="metric-sub" id="c-reserve-sub">—</div>
-      </div>
-      <div class="metric">
-        <div class="metric-label">現金部位</div>
-        <div class="metric-value pos" id="c-cash">—</div>
-        <div class="metric-sub">200萬 − 已投入</div>
-      </div>
+    <!-- 現金輸入 -->
+    <div class="cash-input-row">
+      <span class="cash-input-label">可投資現金（實際）</span>
+      <input class="cash-input" type="number" id="cash-input" placeholder="請輸入" />
+      <button class="cash-input-btn" onclick="updateCash()">更新</button>
     </div>
 
     <div class="grid2">
       <div class="metric"><div class="metric-label">合計持股市值</div><div class="metric-value" id="c-mv">—</div></div>
+      <div class="metric"><div class="metric-label">可投資現金</div><div class="metric-value pos" id="c-cash-display">—</div></div>
+    </div>
+    <div class="grid2">
+      <div class="metric"><div class="metric-label">投資總資產 A</div><div class="metric-value" id="c-total-assets">—</div></div>
       <div class="metric">
         <div class="metric-label">合計損益 / 報酬率</div>
         <div class="metric-value" id="c-pnl">—</div>
         <div class="metric-sub" id="c-ret">—</div>
       </div>
     </div>
+    <div class="grid2">
+      <div class="metric"><div class="metric-label">合計已投入成本</div><div class="metric-value" id="c-invested">—</div></div>
+      <div class="metric">
+        <div class="metric-label">還款備用金 <span style="font-size:10px;color:#bbb;">可還款到 2027/05</span></div>
+        <div class="metric-value warn" id="c-reserve">—</div>
+        <div class="metric-sub" id="c-reserve-sub">—</div>
+      </div>
+    </div>
 
     <div class="bar-wrap">
       <div style="display:flex;justify-content:space-between;align-items:center;">
-        <span style="font-size:14px;color:#666;">合計曝險率</span>
+        <span style="font-size:14px;color:#666;">曝險率 E÷A</span>
         <span style="font-size:22px;font-weight:600;" id="c-exp">—</span>
       </div>
       <div class="bar-track">
@@ -130,7 +145,24 @@ body { font-family: -apple-system, sans-serif; background: #f5f5f5; color: #111;
       </div>
       <div class="bar-labels"><span>0%</span><span>100%</span><span>200%</span></div>
       <div style="font-size:12px;color:#888;margin-top:6px;" id="c-formula">—</div>
-      <div class="hint-box" id="c-hint" style="display:none;"></div>
+    </div>
+
+    <!-- 再平衡區塊 -->
+    <div class="rebalance-card" id="rebalance-section" style="display:none;">
+      <div class="rebalance-title">📊 再平衡計算（目標 150%，以 00631L 調整）</div>
+      <div class="rebalance-row"><span class="rebalance-label">約當曝險金額 E</span><span class="rebalance-val" id="rb-E">—</span></div>
+      <div class="rebalance-row"><span class="rebalance-label">投資總資產 A</span><span class="rebalance-val" id="rb-A">—</span></div>
+      <div class="rebalance-row"><span class="rebalance-label">目標曝險金額 (T×A)</span><span class="rebalance-val" id="rb-TA">—</span></div>
+      <div class="rebalance-row"><span class="rebalance-label">需調整金額 D = (E-T×A)÷2</span><span class="rebalance-val" id="rb-D">—</span></div>
+      <div class="rebalance-row"><span class="rebalance-label">00631L 現價</span><span class="rebalance-val" id="rb-price">—</span></div>
+      <div class="rebalance-row"><span class="rebalance-label">理論股數（含零股）</span><span class="rebalance-val" id="rb-exact">—</span></div>
+
+      <div id="rb-hint" class="hint-box" style="margin-top:12px;"></div>
+
+      <div style="margin-top:12px;">
+        <div class="scenario-title">整張方案（1,000股為單位）</div>
+        <div id="rb-scenarios"></div>
+      </div>
     </div>
 
     <div class="stock-card">
@@ -147,7 +179,7 @@ body { font-family: -apple-system, sans-serif; background: #f5f5f5; color: #111;
 
     <div class="stock-card">
       <div class="stock-top">
-        <div><div style="display:flex;align-items:center;gap:8px;"><span style="font-size:16px;font-weight:600;">00685L</span><span class="badge ba">2× 槓桿</span></div><div style="font-size:12px;color:#888;margin-top:2px;">合計 10,000 股（6,000 + 4,000）</div></div>
+        <div><div style="display:flex;align-items:center;gap:8px;"><span style="font-size:16px;font-weight:600;">00685L</span><span class="badge ba">2× 槓桿</span></div><div style="font-size:12px;color:#888;margin-top:2px;">合計 10,000 株（6,000 + 4,000）</div></div>
         <div style="text-align:right;"><div style="font-size:11px;color:#888;">收盤價</div><div style="font-size:18px;font-weight:600;" id="c-p685">—</div></div>
       </div>
       <div class="stock-cols">
@@ -264,7 +296,7 @@ body { font-family: -apple-system, sans-serif; background: #f5f5f5; color: #111;
         <span style="font-size:20px;font-weight:600;" id="l1-pct">—</span>
       </div>
       <div style="font-size:12px;color:#888;margin-bottom:10px;" id="l1-sub">—</div>
-      <div class="bar-track"><div class="bar-fill-green" id="l1-bar" style="width:0%"></div></div>
+      <div class="bar-track" style="margin-top:10px;"><div class="bar-fill-green" id="l1-bar" style="width:0%"></div></div>
       <div class="progress-nums">
         <div class="pn">已還 <span id="l1-paid">—</span> 期</div>
         <div class="pn">剩餘 <span id="l1-remain">—</span> 期</div>
@@ -292,7 +324,6 @@ body { font-family: -apple-system, sans-serif; background: #f5f5f5; color: #111;
       <div class="row"><span class="rl">已付利息</span><span class="rv neg" id="l1-paid-int">—</span></div>
       <div class="row"><span class="rl">已繳總金額</span><span class="rv" id="l1-total">—</span></div>
     </div>
-
     <div class="loan-section-title" style="margin-top:1.5rem;">將來轉增貸</div>
     <div class="bar-wrap">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
@@ -300,7 +331,7 @@ body { font-family: -apple-system, sans-serif; background: #f5f5f5; color: #111;
         <span style="font-size:20px;font-weight:600;" id="l2-pct">—</span>
       </div>
       <div style="font-size:12px;color:#888;margin-bottom:10px;" id="l2-sub">—</div>
-      <div class="bar-track"><div class="bar-fill-green" id="l2-bar" style="width:0%"></div></div>
+      <div class="bar-track" style="margin-top:10px;"><div class="bar-fill-green" id="l2-bar" style="width:0%"></div></div>
       <div class="progress-nums">
         <div class="pn">已還 <span id="l2-paid">—</span> 期</div>
         <div class="pn">剩餘 <span id="l2-remain">—</span> 期</div>
@@ -326,7 +357,6 @@ body { font-family: -apple-system, sans-serif; background: #f5f5f5; color: #111;
       <div class="row"><span class="rl">已付利息</span><span class="rv neg" id="l2-paid-int">—</span></div>
       <div class="row"><span class="rl">已繳總金額</span><span class="rv" id="l2-total">—</span></div>
     </div>
-
     <div class="install-banner" id="install-banner" style="display:none;">
       <div class="install-icon">📈</div>
       <div class="install-text"><div class="install-title">加入主畫面</div><div class="install-sub">像 App 一樣快速開啟</div></div>
@@ -346,52 +376,57 @@ body { font-family: -apple-system, sans-serif; background: #f5f5f5; color: #111;
 const API_URL = 'https://investment-tracker-one-ashy.vercel.app/api/prices';
 const principalA = 997000;
 const principalB = 1115845;
-const principalC = principalA + principalB;
-const CASH_BASE = 2000000;
 const TARGET_EXP = 1.50;
+const FEE_RATE = 0.001425;
+const TAX_RATE = 0.003;
 
-const RESERVE_START = 112845;
+const RESERVE_INITIAL = 112845;
 const RESERVE_DEDUCT = 15440;
 const RESERVE_START_YEAR = 2026;
 const RESERVE_START_MONTH = 11;
 const RESERVE_PAY_DAY = 7;
 
-const a631 = { shares: 25000, cost: 36.29 };
-const a685 = { shares: 6000, cost: 11.64 };
-const b631 = { shares: 17000, cost: 34.33 };
-const b685 = { shares: 4000, cost: 9.94 };
+const a631 = { shares: 25000, cost: 36.29, lev: 2 };
+const a685 = { shares: 6000, cost: 11.64, lev: 2 };
+const b631 = { shares: 17000, cost: 34.33, lev: 2 };
+const b685 = { shares: 4000, cost: 9.94, lev: 2 };
+
+const C631_TOTAL = a631.shares + b631.shares;
+const C685_TOTAL = a685.shares + b685.shares;
 
 const L1 = { principal: 997000, rate: 0.028, periods: 84, payment: 13123, startYear: 2026, startMonth: 4, payDay: 16 };
 const L2 = { principal: 1160000, rate: 0.0243, periods: 360, payment: 2317, startYear: 2026, startMonth: 8, payDay: 9 };
 
+const CASH_KEY = 'invest_cash_v2';
+let userCash = parseFloat(localStorage.getItem(CASH_KEY) || '0');
+let lastP631 = 0, lastP685 = 0;
+
 function fmt(n) { return 'NT$' + Math.round(n).toLocaleString(); }
+function fmtF(n, d=2) { return 'NT$' + n.toFixed(d); }
 function pct(n) { return (n >= 0 ? '+' : '') + n.toFixed(2) + '%'; }
 function set(id, val, cls) {
   const el = document.getElementById(id);
   if (!el) return;
   el.textContent = val;
-  if (cls) el.className = cls;
+  if (cls !== undefined) el.className = cls;
 }
 
 function getTWNow() {
-  const now = new Date();
-  const tw = new Date(now.getTime() + 8 * 60 * 60 * 1000);
-  return { y: tw.getUTCFullYear(), m: tw.getUTCMonth() + 1, d: tw.getUTCDate() };
+  const tw = new Date(new Date().getTime() + 8*3600*1000);
+  return { y: tw.getUTCFullYear(), m: tw.getUTCMonth()+1, d: tw.getUTCDate() };
 }
 
 function calcReserveFund() {
   const { y, m, d } = getTWNow();
-  let deductions = 0;
-  let sy = RESERVE_START_YEAR, sm = RESERVE_START_MONTH;
+  let deductions = 0, sy = RESERVE_START_YEAR, sm = RESERVE_START_MONTH;
   while (true) {
     if (sy > y) break;
     if (sy === y && sm > m) break;
     if (sy === y && sm === m && d < RESERVE_PAY_DAY) break;
-    deductions++;
-    sm++;
+    deductions++; sm++;
     if (sm > 12) { sm = 1; sy++; }
   }
-  return Math.max(0, RESERVE_START - deductions * RESERVE_DEDUCT);
+  return { amount: Math.max(0, RESERVE_INITIAL - deductions * RESERVE_DEDUCT), deductions };
 }
 
 function calcPaidPeriods(startYear, startMonth, payDay) {
@@ -401,28 +436,226 @@ function calcPaidPeriods(startYear, startMonth, payDay) {
     if (sy > y) break;
     if (sy === y && sm > m) break;
     if (sy === y && sm === m && d < payDay) break;
-    paid++; sm++;
-    if (sm > 12) { sm = 1; sy++; }
+    paid++; sm++; if (sm > 12) { sm = 1; sy++; }
   }
   return paid;
 }
 
-function calcLoan(loan, paidPeriods) {
+function calcLoanDetail(loan, paid) {
   const r = loan.rate / 12;
   let bal = loan.principal, tp = 0, ti = 0;
-  for (let i = 1; i <= paidPeriods; i++) {
+  for (let i = 1; i <= paid; i++) {
     const ip = bal * r, pp = loan.payment - ip;
     tp += pp; ti += ip; bal -= pp;
   }
-  const curInt = bal * r;
-  return { balance: bal, totalPrin: tp, totalInt: ti, curPrin: loan.payment - curInt, curInt };
+  const ci = bal * r;
+  return { balance: bal, totalPrin: tp, totalInt: ti, curPrin: loan.payment - ci, curInt: ci };
+}
+
+function updateCash() {
+  const val = parseFloat(document.getElementById('cash-input').value);
+  if (isNaN(val) || val < 0) { alert('請輸入有效金額'); return; }
+  userCash = val;
+  localStorage.setItem(CASH_KEY, val);
+  if (lastP631 > 0 && lastP685 > 0) renderAll(lastP631, lastP685, '');
+}
+
+function expRate(E, A) { return A > 0 ? E / A * 100 : 0; }
+
+function scenarioBlock(shares631, p631, mv685, cCash, shares685Total) {
+  const mv631 = shares631 * p631;
+  const totalMV = mv631 + mv685;
+  const totalAssets = totalMV + cCash;
+  const E = mv631 * 2 + mv685 * 2;
+  const exp = expRate(E, totalAssets);
+  const tradeAmt = Math.abs((shares631 - C631_TOTAL)) * p631;
+  const isSell = shares631 < C631_TOTAL;
+  const fee = isSell ? tradeAmt * (FEE_RATE + TAX_RATE) : tradeAmt * FEE_RATE;
+  const netCash = isSell ? cCash + tradeAmt - fee : cCash - tradeAmt - fee;
+  const diff = shares631 - C631_TOTAL;
+  const sign = diff < 0 ? '賣出' : '買進';
+  return `<div class="scenario-block">
+    <b>${sign} ${Math.abs(diff).toLocaleString()} 股 00631L（${Math.abs(diff/1000).toFixed(0)} 張）</b><br>
+    交易金額：${fmt(tradeAmt)}｜預估費用：${fmt(fee)}<br>
+    交易後 00631L：${shares631.toLocaleString()} 股｜現金：${fmt(netCash)}<br>
+    持股市值合計：${fmt(totalMV)}｜總資產：${fmt(totalAssets)}<br>
+    預估曝險率：<b>${exp.toFixed(3)}%</b>
+  </div>`;
+}
+
+function renderAll(p631, p685, dateStr) {
+  lastP631 = p631; lastP685 = p685;
+
+  const ma631 = a631.shares * p631, ca631 = a631.shares * a631.cost;
+  const ma685 = a685.shares * p685, ca685 = a685.shares * a685.cost;
+  const mb631 = b631.shares * p631, cb631 = b631.shares * b631.cost;
+  const mb685 = b685.shares * p685, cb685 = b685.shares * b685.cost;
+
+  const aCost = ca631 + ca685, aMV = ma631 + ma685;
+  const aPnl = aMV - aCost, aRet = aPnl / aCost * 100;
+  const aExpE = aMV * 2;
+  const aExpRate = aExpE / principalA * 100;
+  const aCash = principalA - aCost;
+
+  const bCost = cb631 + cb685, bMV = mb631 + mb685;
+  const bPnl = bMV - bCost, bRet = bPnl / bCost * 100;
+  const bExpE = bMV * 2;
+  const bExpRate = bExpE / principalB * 100;
+
+  // 合計
+  const cCost = aCost + bCost;
+  const c631MV = (a631.shares + b631.shares) * p631;
+  const c685MV = (a685.shares + b685.shares) * p685;
+  const cMV = c631MV + c685MV;
+  const c631Cost = ca631 + cb631, c685Cost = ca685 + cb685;
+  const cPnl = cMV - cCost, cRet = cPnl / cCost * 100;
+  const c631WAvg = c631Cost / C631_TOTAL;
+
+  // 正確曝險計算
+  const cCash = userCash;
+  const cTotalAssets = cMV + cCash;
+  const cE = c631MV * 2 + c685MV * 2;
+  const cExpRateVal = expRate(cE, cTotalAssets);
+
+  // 再平衡
+  const T = TARGET_EXP;
+  const D = (cE - T * cTotalAssets) / 2; // 需調整的00631L金額
+  const exactShares = Math.abs(D) / p631;
+  const isSell = D > 0;
+  const adjShares = isSell ? Math.ceil(exactShares) : Math.floor(exactShares);
+  const adjShares1000 = Math.round(exactShares / 1000) * 1000;
+  const adjSharesLo = Math.floor(exactShares / 1000) * 1000;
+  const adjSharesHi = Math.ceil(exactShares / 1000) * 1000;
+  const newShares631After = isSell ? C631_TOTAL - adjShares : C631_TOTAL + adjShares;
+
+  // 還款備用金
+  const { amount: reserveNow, deductions } = calcReserveFund();
+
+  // UI 更新 - 元大信貸
+  set('a-cash', fmt(aCash), aCash>=0?'metric-value pos':'metric-value neg');
+  set('a-invested', fmt(aCost)); set('a-mv', fmt(aMV));
+  set('a-pnl', (aPnl>=0?'+NT$':'-NT$')+Math.abs(Math.round(aPnl)).toLocaleString(), 'metric-value '+(aPnl>=0?'pos':'neg'));
+  set('a-ret', pct(aRet), 'metric-value '+(aRet>=0?'pos':'neg'));
+  set('a-exp', aExpRate.toFixed(1)+'%');
+  document.getElementById('a-bar').style.width = Math.min(aExpRate/2,100)+'%';
+  set('a-formula', '市值 '+fmt(aMV)+' ×2 ÷ 本金 '+fmt(principalA)+' = '+aExpRate.toFixed(1)+'%');
+  set('a-p631','NT$'+p631.toFixed(2)); set('a-p631b','NT$'+p631.toFixed(2)); set('a-mv631',fmt(ma631));
+  set('a-pnl631',(ma631-ca631>=0?'+NT$':'-NT$')+Math.abs(Math.round(ma631-ca631)).toLocaleString(), ma631-ca631>=0?'pos':'neg');
+  set('a-ret631',pct((ma631-ca631)/ca631*100), ma631-ca631>=0?'pos':'neg');
+  set('a-p685','NT$'+p685.toFixed(2)); set('a-p685b','NT$'+p685.toFixed(2)); set('a-mv685',fmt(ma685));
+  set('a-pnl685',(ma685-ca685>=0?'+NT$':'-NT$')+Math.abs(Math.round(ma685-ca685)).toLocaleString(), ma685-ca685>=0?'pos':'neg');
+  set('a-ret685',pct((ma685-ca685)/ca685*100), ma685-ca685>=0?'pos':'neg');
+
+  // 將來房貸
+  set('b-invested', fmt(bCost)); set('b-mv', fmt(bMV));
+  set('b-pnl', (bPnl>=0?'+NT$':'-NT$')+Math.abs(Math.round(bPnl)).toLocaleString(), 'metric-value '+(bPnl>=0?'pos':'neg'));
+  set('b-ret', pct(bRet), 'metric-value '+(bRet>=0?'pos':'neg'));
+  set('b-exp', bExpRate.toFixed(1)+'%');
+  document.getElementById('b-bar').style.width = Math.min(bExpRate/2,100)+'%';
+  set('b-formula', '市值 '+fmt(bMV)+' ×2 ÷ 本金 '+fmt(principalB)+' = '+bExpRate.toFixed(1)+'%');
+  set('b-p631','NT$'+p631.toFixed(2)); set('b-p631b','NT$'+p631.toFixed(2)); set('b-mv631',fmt(mb631));
+  set('b-pnl631',(mb631-cb631>=0?'+NT$':'-NT$')+Math.abs(Math.round(mb631-cb631)).toLocaleString(), mb631-cb631>=0?'pos':'neg');
+  set('b-ret631',pct((mb631-cb631)/cb631*100), mb631-cb631>=0?'pos':'neg');
+  set('b-p685','NT$'+p685.toFixed(2)); set('b-p685b','NT$'+p685.toFixed(2)); set('b-mv685',fmt(mb685));
+  set('b-pnl685',(mb685-cb685>=0?'+NT$':'-NT$')+Math.abs(Math.round(mb685-cb685)).toLocaleString(), mb685-cb685>=0?'pos':'neg');
+  set('b-ret685',pct((mb685-cb685)/cb685*100), mb685-cb685>=0?'pos':'neg');
+
+  // 整合頁
+  set('c-invested', fmt(cCost));
+  set('c-reserve', fmt(reserveNow), 'metric-value warn');
+  set('c-reserve-sub', '已扣 '+deductions+' 次，每月7號扣 NT$15,440');
+  set('c-cash-display', cCash > 0 ? fmt(cCash) : '請輸入現金', cCash > 0 ? 'metric-value pos' : 'metric-value warn');
+  set('c-mv', fmt(cMV));
+  set('c-total-assets', fmt(cTotalAssets));
+  set('c-pnl', (cPnl>=0?'+NT$':'-NT$')+Math.abs(Math.round(cPnl)).toLocaleString(), 'metric-value '+(cPnl>=0?'pos':'neg'));
+  set('c-ret', pct(cRet), 'metric-sub '+(cRet>=0?'pos':'neg'));
+  set('c-exp', cExpRateVal.toFixed(3)+'%');
+  document.getElementById('c-bar').style.width = Math.min(cExpRateVal/2,100)+'%';
+  set('c-formula', 'E='+fmt(cE)+' ÷ A='+fmt(cTotalAssets)+' = '+cExpRateVal.toFixed(3)+'%');
+
+  // 再平衡區塊
+  const rbSection = document.getElementById('rebalance-section');
+  if (cCash > 0) {
+    rbSection.style.display = 'block';
+    set('rb-E', fmt(cE));
+    set('rb-A', fmt(cTotalAssets));
+    set('rb-TA', fmt(T * cTotalAssets));
+    set('rb-D', (D>0?'賣出 ':'買入 ')+fmt(Math.abs(D)));
+    set('rb-price', 'NT$'+p631.toFixed(2));
+    set('rb-exact', exactShares.toFixed(2)+' 股（'+isSell+'賣出取整 '+adjShares+' 股）');
+
+    const hint = document.getElementById('rb-hint');
+    if (Math.abs(D) < 1) {
+      hint.className = 'hint-box hint-ok';
+      hint.textContent = '✓ 曝險率已達150%，無需調整';
+    } else if (isSell) {
+      const canSell = C631_TOTAL;
+      if (adjShares > canSell) {
+        hint.className = 'hint-box hint-sell';
+        hint.textContent = '▼ 需賣出 '+adjShares+' 股，但僅持有 '+canSell.toLocaleString()+' 股，差額 '+(adjShares-canSell)+' 股請考慮賣 00685L 補足';
+      } else {
+        hint.className = 'hint-box hint-sell';
+        hint.innerHTML = '▼ 超過150%，需賣出 00631L <b>'+adjShares.toLocaleString()+' 股</b>（含零股）<br>賣出金額約 '+fmt(adjShares*p631);
+      }
+    } else {
+      const canBuy = Math.floor(cCash / p631);
+      if (adjShares > canBuy) {
+        hint.className = 'hint-box hint-buy';
+        hint.textContent = '▲ 需買入 '+adjShares+' 股，但現金僅足夠買 '+canBuy.toLocaleString()+' 股';
+      } else {
+        hint.className = 'hint-box hint-buy';
+        hint.innerHTML = '▲ 低於150%，需買入 00631L <b>'+adjShares.toLocaleString()+' 股</b>（含零股）<br>買入金額約 '+fmt(adjShares*p631);
+      }
+    }
+
+    // 整張方案
+    const scenDiv = document.getElementById('rb-scenarios');
+    let html = '';
+    if (Math.abs(D) >= p631) {
+      if (isSell) {
+        const loShares = C631_TOTAL - adjSharesLo;
+        const hiShares = C631_TOTAL - adjSharesHi;
+        if (adjSharesLo > 0) html += scenarioBlock(loShares, p631, c685MV, cCash, C685_TOTAL);
+        if (adjSharesHi > 0 && adjSharesHi !== adjSharesLo) html += scenarioBlock(hiShares, p631, c685MV, cCash, C685_TOTAL);
+      } else {
+        const loShares = C631_TOTAL + adjSharesLo;
+        const hiShares = C631_TOTAL + adjSharesHi;
+        if (adjSharesLo > 0) html += scenarioBlock(loShares, p631, c685MV, cCash, C685_TOTAL);
+        if (adjSharesHi > 0 && adjSharesHi !== adjSharesLo) html += scenarioBlock(hiShares, p631, c685MV, cCash, C685_TOTAL);
+      }
+    } else {
+      html = '<div style="font-size:12px;color:#888;margin-top:6px;">調整金額不足一張，請使用零股模式</div>';
+    }
+    scenDiv.innerHTML = html;
+  } else {
+    rbSection.style.display = 'none';
+  }
+
+  set('c-wavg631', 'NT$'+c631WAvg.toFixed(2));
+  set('c-cost631', fmt(c631Cost));
+  set('c-p631','NT$'+p631.toFixed(2)); set('c-p631b','NT$'+p631.toFixed(2)); set('c-mv631',fmt(c631MV));
+  const c631Pnl = c631MV - c631Cost;
+  set('c-pnl631',(c631Pnl>=0?'+NT$':'-NT$')+Math.abs(Math.round(c631Pnl)).toLocaleString(), c631Pnl>=0?'pos':'neg');
+  set('c-ret631',pct(c631Pnl/c631Cost*100), c631Pnl>=0?'pos':'neg');
+  set('c-p685','NT$'+p685.toFixed(2)); set('c-p685b','NT$'+p685.toFixed(2)); set('c-mv685',fmt(c685MV));
+  const c685Pnl = c685MV - c685Cost;
+  set('c-pnl685',(c685Pnl>=0?'+NT$':'-NT$')+Math.abs(Math.round(c685Pnl)).toLocaleString(), c685Pnl>=0?'pos':'neg');
+  set('c-ret685',pct(c685Pnl/c685Cost*100), c685Pnl>=0?'pos':'neg');
+
+  if (dateStr) {
+    document.getElementById('dot').className = 'dot live';
+    document.getElementById('status').textContent = '收盤價更新：'+dateStr;
+  }
+
+  // 顯示目前現金輸入框
+  if (userCash > 0) document.getElementById('cash-input').value = userCash;
 }
 
 function renderLoan() {
   const p1 = calcPaidPeriods(L1.startYear, L1.startMonth, L1.payDay);
   const p2 = calcPaidPeriods(L2.startYear, L2.startMonth, L2.payDay);
-  const l1 = calcLoan(L1, p1);
-  const l2 = calcLoan(L2, p2);
+  const l1 = calcLoanDetail(L1, p1);
+  const l2 = calcLoanDetail(L2, p2);
   const r1 = L1.periods - p1, r2 = L2.periods - p2;
 
   set('l1-pct', (p1/L1.periods*100).toFixed(1)+'%');
@@ -439,7 +672,7 @@ function renderLoan() {
 
   const intOnly = L2.principal * (L2.rate/12);
   set('l2-pct', (p2/L2.periods*100).toFixed(1)+'%');
-  set('l2-sub', '寬限期中，貸款餘額 NT$'+Math.round(L2.principal).toLocaleString()+'，約 '+Math.floor(r2/12)+' 年 '+(r2%12)+' 個月');
+  set('l2-sub', '寬限期中，貸款餘額 NT$'+L2.principal.toLocaleString()+'，約 '+Math.floor(r2/12)+' 年 '+(r2%12)+' 個月');
   document.getElementById('l2-bar').style.width = (p2/L2.periods*100)+'%';
   set('l2-paid', p2); set('l2-remain', r2); set('l2-paid2', p2+' 期');
   set('l2-balance', fmt(L2.principal));
@@ -449,122 +682,13 @@ function renderLoan() {
   set('l2-accum-title', '已繳 '+p2+' 期累計');
 }
 
-function renderPrices(p631, p685, dateStr) {
-  const ma631 = a631.shares*p631, ca631 = a631.shares*a631.cost;
-  const ma685 = a685.shares*p685, ca685 = a685.shares*a685.cost;
-  const mb631 = b631.shares*p631, cb631 = b631.shares*b631.cost;
-  const mb685 = b685.shares*p685, cb685 = b685.shares*b685.cost;
-
-  const aCost = ca631+ca685, aMV = ma631+ma685;
-  const aPnl = aMV-aCost, aRet = aPnl/aCost*100;
-  const aExpRate = (aMV*2)/principalA*100;
-  const aCash = principalA-aCost;
-
-  const bCost = cb631+cb685, bMV = mb631+mb685;
-  const bPnl = bMV-bCost, bRet = bPnl/bCost*100;
-  const bExpRate = (bMV*2)/principalB*100;
-
-  const cCost = aCost+bCost, cMV = aMV+bMV;
-  const cPnl = cMV-cCost, cRet = cPnl/cCost*100;
-  const cCash = CASH_BASE - cCost;
-  const cExpRate = (cMV*2)/(cMV+cCash)*100;
-
-  const reserveNow = calcReserveFund();
-  const { y, m, d } = getTWNow();
-  let deductions = 0;
-  let sy = RESERVE_START_YEAR, sm2 = RESERVE_START_MONTH;
-  while (true) {
-    if (sy > y) break;
-    if (sy === y && sm2 > m) break;
-    if (sy === y && sm2 === m && d < RESERVE_PAY_DAY) break;
-    deductions++; sm2++;
-    if (sm2 > 12) { sm2 = 1; sy++; }
-  }
-
-  const c631MV = ma631+mb631, c631Cost = ca631+cb631, c631Pnl = c631MV-c631Cost;
-  const c685MV = ma685+mb685, c685Cost = ca685+cb685, c685Pnl = c685MV-c685Cost;
-  const c631WAvg = c631Cost/(a631.shares+b631.shares);
-
-  // 精確計算達到150%曝險需要的操作
-  // 目標: M*2/(M+C) = 1.5 => 2M = 1.5M + 1.5C => 0.5M = 1.5C => M = 3C
-  // 目標市值 = 3 * cCash
-  const targetMV = 3 * cCash;
-  const diffMV = targetMV - cMV;
-  // 精確計算00631L股數 (全部用00631L調整)
-  const exact631Shares = Math.abs(diffMV) / p631;
-  const exact631SharesRounded = Math.round(exact631Shares / 1000) * 1000;
-
-  set('a-cash', fmt(aCash), aCash>=0?'metric-value pos':'metric-value neg');
-  set('a-invested', fmt(aCost)); set('a-mv', fmt(aMV));
-  set('a-pnl', (aPnl>=0?'+NT$':'-NT$')+Math.abs(Math.round(aPnl)).toLocaleString(), 'metric-value '+(aPnl>=0?'pos':'neg'));
-  set('a-ret', pct(aRet), 'metric-value '+(aRet>=0?'pos':'neg'));
-  set('a-exp', aExpRate.toFixed(1)+'%');
-  document.getElementById('a-bar').style.width = Math.min(aExpRate/2,100)+'%';
-  set('a-formula', '('+fmt(ma631)+' + '+fmt(ma685)+') ×2 ÷ NT$997,000 = '+aExpRate.toFixed(1)+'%');
-  set('a-p631','NT$'+p631.toFixed(2)); set('a-p631b','NT$'+p631.toFixed(2)); set('a-mv631',fmt(ma631));
-  set('a-pnl631',(ma631-ca631>=0?'+NT$':'-NT$')+Math.abs(Math.round(ma631-ca631)).toLocaleString(), ma631-ca631>=0?'pos':'neg');
-  set('a-ret631',pct((ma631-ca631)/ca631*100), ma631-ca631>=0?'pos':'neg');
-  set('a-p685','NT$'+p685.toFixed(2)); set('a-p685b','NT$'+p685.toFixed(2)); set('a-mv685',fmt(ma685));
-  set('a-pnl685',(ma685-ca685>=0?'+NT$':'-NT$')+Math.abs(Math.round(ma685-ca685)).toLocaleString(), ma685-ca685>=0?'pos':'neg');
-  set('a-ret685',pct((ma685-ca685)/ca685*100), ma685-ca685>=0?'pos':'neg');
-
-  set('b-invested', fmt(bCost)); set('b-mv', fmt(bMV));
-  set('b-pnl', (bPnl>=0?'+NT$':'-NT$')+Math.abs(Math.round(bPnl)).toLocaleString(), 'metric-value '+(bPnl>=0?'pos':'neg'));
-  set('b-ret', pct(bRet), 'metric-value '+(bRet>=0?'pos':'neg'));
-  set('b-exp', bExpRate.toFixed(1)+'%');
-  document.getElementById('b-bar').style.width = Math.min(bExpRate/2,100)+'%';
-  set('b-formula', '('+fmt(mb631)+' + '+fmt(mb685)+') ×2 ÷ NT$1,115,845 = '+bExpRate.toFixed(1)+'%');
-  set('b-p631','NT$'+p631.toFixed(2)); set('b-p631b','NT$'+p631.toFixed(2)); set('b-mv631',fmt(mb631));
-  set('b-pnl631',(mb631-cb631>=0?'+NT$':'-NT$')+Math.abs(Math.round(mb631-cb631)).toLocaleString(), mb631-cb631>=0?'pos':'neg');
-  set('b-ret631',pct((mb631-cb631)/cb631*100), mb631-cb631>=0?'pos':'neg');
-  set('b-p685','NT$'+p685.toFixed(2)); set('b-p685b','NT$'+p685.toFixed(2)); set('b-mv685',fmt(mb685));
-  set('b-pnl685',(mb685-cb685>=0?'+NT$':'-NT$')+Math.abs(Math.round(mb685-cb685)).toLocaleString(), mb685-cb685>=0?'pos':'neg');
-  set('b-ret685',pct((mb685-cb685)/cb685*100), mb685-cb685>=0?'pos':'neg');
-
-  set('c-invested', fmt(cCost));
-  set('c-reserve', fmt(reserveNow), 'metric-value warn');
-  set('c-reserve-sub', '已扣 '+deductions+' 次，每月7號扣 NT$15,440');
-  set('c-cash', fmt(cCash), cCash>=0?'metric-value pos':'metric-value neg');
-  set('c-mv', fmt(cMV));
-  set('c-pnl', (cPnl>=0?'+NT$':'-NT$')+Math.abs(Math.round(cPnl)).toLocaleString(), 'metric-value '+(cPnl>=0?'pos':'neg'));
-  set('c-ret', pct(cRet), 'metric-sub '+(cRet>=0?'pos':'neg'));
-  set('c-exp', cExpRate.toFixed(1)+'%');
-  document.getElementById('c-bar').style.width = Math.min(cExpRate/2,100)+'%';
-  set('c-formula', '市值 '+fmt(cMV)+' ×2 ÷ ('+fmt(cMV)+' + '+fmt(cCash)+') = '+cExpRate.toFixed(1)+'%');
-
-  const hint = document.getElementById('c-hint');
-  hint.style.display = 'block';
-  if (diffMV > 0) {
-    hint.className = 'hint-box hint-buy';
-    hint.textContent = '▲ 距150%曝險還差 '+fmt(diffMV)+'，需買入 00631L 精確 '+Math.round(exact631Shares)+' 股（約 '+exact631SharesRounded.toLocaleString()+' 股）';
-  } else if (diffMV < 0) {
-    hint.className = 'hint-box hint-sell';
-    hint.textContent = '▼ 已超過150%曝險，超出 '+fmt(Math.abs(diffMV))+'，需賣出 00631L 精確 '+Math.round(exact631Shares)+' 股（約 '+exact631SharesRounded.toLocaleString()+' 股）';
-  } else {
-    hint.className = 'hint-box hint-buy';
-    hint.textContent = '✓ 曝險率剛好在150%';
-  }
-
-  set('c-wavg631', 'NT$'+c631WAvg.toFixed(2));
-  set('c-cost631', fmt(c631Cost));
-  set('c-p631','NT$'+p631.toFixed(2)); set('c-p631b','NT$'+p631.toFixed(2)); set('c-mv631',fmt(c631MV));
-  set('c-pnl631',(c631Pnl>=0?'+NT$':'-NT$')+Math.abs(Math.round(c631Pnl)).toLocaleString(), c631Pnl>=0?'pos':'neg');
-  set('c-ret631',pct(c631Pnl/c631Cost*100), c631Pnl>=0?'pos':'neg');
-  set('c-p685','NT$'+p685.toFixed(2)); set('c-p685b','NT$'+p685.toFixed(2)); set('c-mv685',fmt(c685MV));
-  set('c-pnl685',(c685Pnl>=0?'+NT$':'-NT$')+Math.abs(Math.round(c685Pnl)).toLocaleString(), c685Pnl>=0?'pos':'neg');
-  set('c-ret685',pct(c685Pnl/c685Cost*100), c685Pnl>=0?'pos':'neg');
-
-  document.getElementById('dot').className = 'dot live';
-  document.getElementById('status').textContent = '收盤價更新：'+dateStr;
-}
-
 async function fetchPrices() {
   try {
     const resp = await fetch(API_URL);
     const data = await resp.json();
     const p631 = data.prices['00631L']?.close;
     const p685 = data.prices['00685L']?.close;
-    if (p631 && p685) renderPrices(p631, p685, data.prices['00631L']?.date||'');
+    if (p631 && p685) renderAll(p631, p685, data.prices['00631L']?.date||'');
     else throw new Error('no data');
   } catch(e) {
     document.getElementById('dot').className = 'dot err';
@@ -574,8 +698,7 @@ async function fetchPrices() {
 
 let deferredPrompt;
 window.addEventListener('beforeinstallprompt', (e) => {
-  e.preventDefault();
-  deferredPrompt = e;
+  e.preventDefault(); deferredPrompt = e;
   document.getElementById('install-banner').style.display = 'flex';
 });
 document.getElementById('install-btn').addEventListener('click', async () => {

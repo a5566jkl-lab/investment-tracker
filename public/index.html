@@ -33,6 +33,9 @@ body { font-family: -apple-system, sans-serif; background: #f5f5f5; color: #111;
 .row:last-child { border-bottom: none; }
 .rl { font-size: 14px; color: #666; }
 .rv { font-size: 14px; font-weight: 500; }
+.row-total { border-top: 1px solid #ddd; margin-top: 2px; padding-top: 9px; }
+.row-total .rl { color: #111; font-weight: 600; }
+.row-total .rv { font-size: 15px; font-weight: 600; }
 .pos { color: #1D9E75; }
 .neg { color: #D85A30; }
 .warn { color: #BA7517; }
@@ -107,16 +110,7 @@ body { font-family: -apple-system, sans-serif; background: #f5f5f5; color: #111;
 
 <div id="tab-c">
   <div class="section" style="padding-top:1rem;">
-    <div class="note">持股由「元大信貸資金」與「將來房貸資金」兩頁加總；現金為實際可投資現金，不重複計入子帳戶</div>
-    <div class="card">
-      <div class="card-title">實際可投資現金</div>
-      <div style="display:flex;gap:8px;">
-        <input class="inp" type="number" inputmode="decimal" id="cash-input" placeholder="例如 399540">
-        <button class="btn" onclick="updateCash()">更新</button>
-      </div>
-      <div class="edit-msg" id="cash-msg"></div>
-      <div class="edit-note">請依券商實際入金、出金、買賣交割、費用、股息與利息核對後輸入。</div>
-    </div>
+    <div class="note">持股由「元大信貸資金」與「將來房貸資金」兩頁加總；實際可投資現金 = 兩個子帳戶剩餘可用資金合計 − 還款備用金，自動計算</div>
     <div id="c-body"><div class="note">載入收盤價中…</div></div>
   </div>
 </div>
@@ -230,7 +224,6 @@ const LEVS = { '631': 2, '685': 2 };
 const FEE_RATE = 0.001425;
 const TAX_RATE = 0.001;
 const HOLD_KEY = 'holdings_v1';
-const CASH_KEY = 'invest_cash_v2';
 
 const RESERVE_INITIAL = 112845;
 const RESERVE_DEDUCT = 15440;
@@ -262,17 +255,8 @@ function loadHoldings() {
   } catch (e) {}
   return h;
 }
-function loadCash() {
-  try {
-    const v = localStorage.getItem(CASH_KEY);
-    if (v === null || v === '') return null;
-    const n = parseFloat(v);
-    return isFinite(n) && n >= 0 ? n : null;
-  } catch (e) { return null; }
-}
 
 let H = loadHoldings();
-let userCash = loadCash();
 let last = null;
 const adj = { stock: '631', mode: 'odd' };
 
@@ -380,14 +364,23 @@ function stockCardHTML(code, name, subtitle, cost, shares, price) {
   </div>`;
 }
 
+/* ---------- 子帳戶計算 ---------- */
+function acctCost(key) {
+  const h = H[key];
+  return h.s631.shares * h.s631.cost + h.s685.shares * h.s685.cost;
+}
+function acctCash(key) {
+  return PRINCIPAL[key] - acctCost(key);
+}
+
 /* ---------- 子帳戶頁 ---------- */
 function accountBody(key, p631, p685) {
   const h = H[key], pr = PRINCIPAL[key];
   const mv631 = h.s631.shares * p631, mv685 = h.s685.shares * p685;
-  const cost = h.s631.shares * h.s631.cost + h.s685.shares * h.s685.cost;
+  const cost = acctCost(key);
   const MV = mv631 + mv685, pnl = MV - cost;
   const ret = cost > 0 ? pnl / cost * 100 : 0;
-  const cash = pr - cost;
+  const cash = acctCash(key);
   const A = MV + cash;
   const E = LEVS['631'] * mv631 + LEVS['685'] * mv685;
   const exp = A > 0 ? E / A * 100 : 0;
@@ -465,16 +458,6 @@ function resetHoldings(acc) {
   renderEditForm(acc);
   renderAll();
   showMsg('msg-' + acc, '已還原為程式內的預設值', false);
-}
-
-/* ---------- 現金 ---------- */
-function updateCash() {
-  const v = readNum('cash-input');
-  if (!isFinite(v) || v < 0) { showMsg('cash-msg', '請輸入 0 以上的金額', true); return; }
-  userCash = v;
-  try { localStorage.setItem(CASH_KEY, String(v)); } catch (e) {}
-  renderAll();
-  showMsg('cash-msg', '已更新', false);
 }
 
 /* ---------- 再平衡 ---------- */
@@ -584,20 +567,24 @@ function integrationBody(p631, p685) {
   const MV = mv631 + mv685, cost = cost631 + cost685, pnl = MV - cost;
   const ret = cost > 0 ? pnl / cost * 100 : 0;
   const E = LEVS['631'] * mv631 + LEVS['685'] * mv685;
+
   const res = calcReserveFund();
-  const hasCash = userCash !== null;
-  const A = MV + (hasCash ? userCash : 0);
-  const exp = hasCash && A > 0 ? E / A * 100 : null;
-  const ctx = { p631, p685, sh631, sh685, cash: userCash, E, A };
+  const cashA = acctCash('a');
+  const cashB = acctCash('b');
+  const cash = cashA + cashB - res.amount;
+  const A = MV + cash;
+  const exp = A > 0 ? E / A * 100 : 0;
+  const ctx = { p631, p685, sh631, sh685, cash, E, A };
 
   return `
   <div class="grid2">
     <div class="metric"><div class="metric-label">合計持股市值</div><div class="metric-value">${fmt(MV)}</div></div>
-    <div class="metric"><div class="metric-label">可投資現金</div>
-      <div class="metric-value ${hasCash ? 'pos' : 'warn'}">${hasCash ? fmt(userCash) : '請先輸入'}</div></div>
+    <div class="metric"><div class="metric-label">實際可投資現金</div>
+      <div class="metric-value ${cash >= 0 ? 'pos' : 'neg'}">${fmt(cash)}</div>
+      <div class="metric-sub">自動計算</div></div>
   </div>
   <div class="grid2">
-    <div class="metric"><div class="metric-label">投資總資產 A（市值 + 現金）</div><div class="metric-value">${hasCash ? fmt(A) : '—'}</div></div>
+    <div class="metric"><div class="metric-label">投資總資產 A（市值 + 現金）</div><div class="metric-value">${fmt(A)}</div></div>
     <div class="metric"><div class="metric-label">合計損益 / 報酬率</div>
       <div class="metric-value ${pnl >= 0 ? 'pos' : 'neg'}">${money(pnl)}</div>
       <div class="metric-sub ${ret >= 0 ? 'pos' : 'neg'}">${pct(ret)}</div></div>
@@ -608,23 +595,30 @@ function integrationBody(p631, p685) {
       <div class="metric-value warn">${fmt(res.amount)}</div>
       <div class="metric-sub">已扣 ${res.deductions} 次，每月 7 號扣 ${fmt(RESERVE_DEDUCT)}</div></div>
   </div>
+
+  <div class="card">
+    <div class="card-title">實際可投資現金計算</div>
+    <div class="row"><span class="rl">元大信貸資金 剩餘可用資金</span><span class="rv ${cashA >= 0 ? '' : 'neg'}">${fmt(cashA)}</span></div>
+    <div class="row"><span class="rl">＋ 將來房貸資金 剩餘可用資金</span><span class="rv ${cashB >= 0 ? '' : 'neg'}">${fmt(cashB)}</span></div>
+    <div class="row"><span class="rl">－ 還款備用金</span><span class="rv warn">${fmt(res.amount)}</span></div>
+    <div class="row row-total"><span class="rl">＝ 實際可投資現金</span><span class="rv ${cash >= 0 ? 'pos' : 'neg'}">${fmt(cash)}</span></div>
+  </div>
+
   <div class="bar-wrap">
     <div style="display:flex;justify-content:space-between;align-items:center;">
       <span style="font-size:14px;color:#666;">合計曝險率 E ÷ A</span>
-      <span style="font-size:22px;font-weight:600;">${exp === null ? '—' : exp.toFixed(3) + '%'}</span>
+      <span style="font-size:22px;font-weight:600;">${exp.toFixed(3)}%</span>
     </div>
     <div class="bar-track">
-      <div class="bar-fill" style="width:${exp === null ? 0 : Math.min(exp / 2, 100)}%"></div>
+      <div class="bar-fill" style="width:${Math.min(exp / 2, 100)}%"></div>
       <div class="bar-mid"></div>
       <div style="position:absolute;top:-4px;left:75%;width:2px;height:16px;background:#1D9E75;"></div>
       <div style="position:absolute;top:-19px;left:71%;font-size:10px;color:#1D9E75;font-weight:600;">150%</div>
     </div>
     <div class="bar-labels"><span>0%</span><span>100%</span><span>200%</span></div>
-    <div style="font-size:12px;color:#888;margin-top:6px;">${hasCash
-      ? `E ${fmt(E)} ÷ A ${fmt(A)}（持股市值 ${fmt(MV)} + 現金 ${fmt(userCash)}）`
-      : '請先在上方輸入實際可投資現金，才能計算曝險率與再平衡'}</div>
+    <div style="font-size:12px;color:#888;margin-top:6px;">E ${fmt(E)} ÷ A ${fmt(A)}（持股市值 ${fmt(MV)} + 現金 ${fmt(cash)}）</div>
   </div>
-  ${hasCash ? rebalanceHTML(ctx) : ''}
+  ${rebalanceHTML(ctx)}
   ${stockCardHTML('00631L', '元大台灣50正2', `合計 ${sh631.toLocaleString()} 股（${a.s631.shares.toLocaleString()} + ${b.s631.shares.toLocaleString()}）`, sh631 > 0 ? cost631 / sh631 : 0, sh631, p631)}
   ${stockCardHTML('00685L', '群益台灣加權正二', `合計 ${sh685.toLocaleString()} 股（${a.s685.shares.toLocaleString()} + ${b.s685.shares.toLocaleString()}）`, sh685 > 0 ? cost685 / sh685 : 0, sh685, p685)}`;
 }
@@ -681,7 +675,6 @@ function showTab(name) {
 
 renderEditForm('a');
 renderEditForm('b');
-if (userCash !== null) el('cash-input').value = userCash;
 renderLoan();
 fetchPrices();
 </script>
